@@ -24,10 +24,9 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
   flutter_markdown:
-  # markdown:
-  # flutter_html:
   http:
   html:
+  google_fonts:
 
 dev_dependencies:
   flutter_test:

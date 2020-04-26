@@ -1,3 +1,4 @@
+import 'package:google_fonts/google_fonts.dart';
 import 'package:html/dom.dart' as doom;
 import 'package:html/parser.dart';
 import 'package:http/http.dart';
@@ -258,10 +259,12 @@ class _MyHomePageState extends State<MyHomePage> {
     var document = await getDocument("https://haxe.io/");
     List<doom.Element> roundups =
         document.querySelectorAll('main > ul > li > a');
+    
+    for(var roundup in roundups) print(roundup.attributes['title']);
 
     return roundups
         .map((roundup) => {
-              'title': roundup.attributes['title'],
+              'title': roundup.attributes['title'].replaceAll("â", "№"), // Skipping encoding battles :3
               'url': roundup.attributes['href']
             })
         .toList();
@@ -281,12 +284,34 @@ class _MyHomePageState extends State<MyHomePage> {
               if (!snapshot.hasData) return Container();
               List<dynamic> roundups = snapshot.data;
               var date = "";
-              return ListView(
-                  children: roundups
-                      .map((roundup) => Container(
-                            child: Text(roundup['title']),
-                          ))
+              return GridView.count(crossAxisCount: 2,
+              children: roundups
+                      .map((roundup) => Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: <Widget>[
+                            Container(color: Color.fromRGBO(241, 89, 34, 0.8), width:4),
+                            Container(color: Color.fromRGBO(241, 89, 34, 0.4), width:4),
+                            Expanded(
+                                                        child: Container(
+                                
+                                // padding: EdgeInsets.all(8),
+                                    child: Text(roundup['title'], textAlign: TextAlign.center, style: GoogleFonts.openSans(
+                                      
+                                      fontSize: 25, fontWeight: FontWeight.w700, color: Color.fromARGB(255, 51, 51, 50)),),
+                                  ),
+                            ),
+                          ],
+                        ),
+                      ))
                       .toList());
+
+              // return ListView(
+              //     children: roundups
+              //         .map((roundup) => Container(
+              //               child: Text(roundup['title'], style: GoogleFonts.openSans(fontSize: 30, fontWeight: FontWeight.w700, color: Color.fromARGB(255, 51, 51, 50)),),
+              //             ))
+              //         .toList());
               // Html(data: "<b>hello</b>")
               // Markdown(
               //       // controller: controller,
