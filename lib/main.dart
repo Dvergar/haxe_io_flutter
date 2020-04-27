@@ -6,6 +6,8 @@ import 'package:http/http.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
+import 'post.dart';
+
 const String _markdownData = r"""
 [_template]: ../templates/roundup.html
 [date]: / "2020-04-23 09:41:00"
@@ -232,6 +234,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Haxe roundups',
       theme: ThemeData(
+        iconTheme: IconThemeData(
+    color: Colors.red
+  ),
+        primarySwatch: Colors.grey,
           scaffoldBackgroundColor: Color.fromARGB(255, 255, 253, 249)),
       home: MyHomePage(title: 'haxe.io'),
     );
@@ -259,7 +265,7 @@ class _MyHomePageState extends State<MyHomePage> {
     List<doom.Element> roundups =
         document.querySelectorAll('main > ul > li > a');
 
-    for (var roundup in roundups) print(roundup.attributes['title']);
+    // for (var roundup in roundups) print(roundup.attributes['title']);
 
     return roundups
         .map((roundup) => {
@@ -272,8 +278,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    scrape();
-
     return Scaffold(
         appBar: AppBar(
           title: Center(
@@ -294,6 +298,13 @@ class _MyHomePageState extends State<MyHomePage> {
                   crossAxisCount: 2,
                   children: roundups
                       .map((roundup) => GestureDetector(
+                            onTap: () {
+                              print("hello");
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Post(roundup: roundup)));
+                            },
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Row(
