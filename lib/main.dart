@@ -59,12 +59,12 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Center(
-              child: Text(
+          centerTitle: true,
+          title: Text(
             widget.title,
             style: GoogleFonts.gentiumBookBasic(
                 color: Color.fromARGB(255, 51, 51, 50), fontSize: 30),
-          )),
+          ),
           elevation: 0.0,
           backgroundColor: Colors.transparent,
         ),
