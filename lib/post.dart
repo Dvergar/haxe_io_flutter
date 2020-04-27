@@ -31,8 +31,7 @@ class Post extends StatelessWidget {
           backgroundColor: Colors.transparent,
         ),
         body: FutureBuilder(
-          future: getDocument(
-              'https://raw.githubusercontent.com/skial/haxe.io/master/src/roundups/526.md'),
+          future: getDocument(roundup['url']),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (!snapshot.hasData) return Container();
             return Markdown(

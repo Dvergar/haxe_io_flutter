@@ -44,15 +44,17 @@ class _MyHomePageState extends State<MyHomePage> {
     List<doom.Element> roundups =
         document.querySelectorAll('main > ul > li > a');
 
-    // for (var roundup in roundups) print(roundup.attributes['title']);
+    return roundups.map((roundup) {
+      var href = roundup.attributes['href'];
+      var hrefClean = href.substring(0, href.length - 1);
 
-    return roundups
-        .map((roundup) => {
-              'title': roundup.attributes['title']
-                  .replaceAll("â", "№"), // Skipping encoding battles :3
-              'url': roundup.attributes['href']
-            })
-        .toList();
+      return {
+        'title': roundup.attributes['title']
+            .replaceAll("â", "№"), // Skipping encoding battles :3
+        'url':
+            'https://raw.githubusercontent.com/skial/haxe.io/master/src/$hrefClean.md'
+      };
+    }).toList();
   }
 
   @override
