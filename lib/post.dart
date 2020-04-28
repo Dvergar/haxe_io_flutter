@@ -6,10 +6,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:html/parser.dart';
 import 'package:http/http.dart';
 
-class Post extends StatefulWidget {
-  final roundup;
+import 'item_type.dart';
 
-  const Post({Key key, this.roundup}) : super(key: key);
+class Post extends StatefulWidget {
+  final ItemType article;
+
+  Post({Key key, this.article}) : super(key: key);
 
   @override
   _PostState createState() => _PostState();
@@ -38,14 +40,14 @@ class _PostState extends State<Post> {
           backgroundColor: Colors.transparent,
         ),
         body: FutureBuilder(
-          future: getDocument(widget.roundup['url']),
+          future: getDocument(widget.article.url),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (!snapshot.hasData)
               return SpinKitChasingDots(
                 color: Colors.orangeAccent,
                 size: 100.0,
               );
-            ;
+
             return Markdown(
               data: snapshot.data,
               styleSheet: MarkdownStyleSheet(

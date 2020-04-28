@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:haxe_roundups_flutter/item_type.dart';
 
 import 'package:html/dom.dart' as doom;
 import 'package:html/parser.dart';
@@ -45,16 +46,39 @@ class _MyHomePageState extends State<MyHomePage> {
     List<doom.Element> roundups =
         document.querySelectorAll('main > ul > li > a');
 
-    return roundups.map((roundup) {
-      var href = roundup.attributes['href'];
+    getMarkDownLink(String href) {
       var hrefClean = href.substring(0, href.length - 1);
+      return 'https://raw.githubusercontent.com/skial/haxe.io/master/src/$hrefClean.md';
+    }
 
-      return {
-        'title': roundup.attributes['title']
-            .replaceAll("â", "№"), // Skipping encoding battles :3
-        'url':
-            'https://raw.githubusercontent.com/skial/haxe.io/master/src/$hrefClean.md'
-      };
+    return roundups.map((roundup) {
+      // URL MANIPULATION
+      var href = roundup.attributes['href'];
+      var title = roundup.attributes['title'].replaceAll("â", "№");
+      ItemType type;
+
+      if (href.startsWith('/ld/')) {
+        type = LudumDare(title, getMarkDownLink(href), true);
+      } else if (href.startsWith('/roundups/')) {
+        type = WeeklyNews(title, getMarkDownLink(href), true);
+      } else if (href.startsWith('/releases/')) {
+        type = Releases(title, getMarkDownLink(href), true);
+      } else if (href.startsWith('/wwx/')) // Fragile
+      {
+        type = DeveloperInterviews(title, getMarkDownLink(href), true);
+      } else if (href.startsWith('/videos/')) {
+        type = Videos(title, getMarkDownLink(href), true);
+      } else if (href.startsWith('/events/')) {
+        type = Events(title, getMarkDownLink(href), true);
+      } else if (roundup.parent.id == 'link--video') {
+        type = Videos(title, href, false);
+      } else if (roundup.parent.id == 'event--link') {
+        type = Events(title, href, false);
+      } else {
+        type = Articles(title, href, false);
+      }
+
+      return type;
     }).toList();
   }
 
@@ -77,13 +101,15 @@ class _MyHomePageState extends State<MyHomePage> {
               alignment: WrapAlignment.spaceAround,
               spacing: 18,
               children: <Widget>[
-                MyChip(label: "Weekly News", color: Color.fromARGB(255, 241, 89, 34)),
-                MyChip(label: "Articles", color: Color.fromARGB(255, 71, 99, 152)),
-                MyChip(label: "Releases", color: Color.fromARGB(255, 108, 198, 68)),
-                MyChip(label: "Events", color: Color.fromARGB(255, 255, 128, 0)),
-                MyChip(label: "Ludum Dare", color: Color.fromARGB(255, 119, 68, 204)),
-                MyChip(label: "Developer Interviews", color: Color.fromARGB(255, 255, 128, 0)),
-                MyChip(label: "Videos", color: Color.fromARGB(255, 205, 32, 31)),
+                MyChip(label: WeeklyNews().typeLabel, color: WeeklyNews().color),
+                MyChip(label: Articles().typeLabel, color: Articles().color),
+                MyChip(label: Releases().typeLabel, color: Releases().color),
+                MyChip(label: Events().typeLabel, color: Events().color),
+                MyChip(label: LudumDare().typeLabel, color: LudumDare().color),
+                MyChip(
+                    label: DeveloperInterviews().typeLabel,
+                    color: DeveloperInterviews().color),
+                MyChip(label: Videos().typeLabel, color: Videos().color),
               ],
             ),
             Expanded(
@@ -91,35 +117,34 @@ class _MyHomePageState extends State<MyHomePage> {
                   future: scrape(),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (!snapshot.hasData) return Container();
-                    List<dynamic> roundups = snapshot.data;
+                    List<ItemType> articles = snapshot.data;
                     return GridView.count(
-                        // shrinkWrap: true,
                         crossAxisCount: 2,
-                        children: roundups
-                            .map((roundup) => GestureDetector(
+                        children: articles
+                            .map((article) => GestureDetector(
                                   onTap: () {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                Post(roundup: roundup)));
+                                                Post(article: article)));
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Row(
                                       children: <Widget>[
                                         Container(
-                                            color: Color.fromRGBO(
-                                                241, 89, 34, 0.8),
+                                            color:
+                                                article.color.withOpacity(0.8),
                                             width: 4),
                                         Container(
-                                            color: Color.fromRGBO(
-                                                241, 89, 34, 0.4),
+                                            color:
+                                                article.color.withOpacity(0.4),
                                             width: 4),
                                         Expanded(
                                           child: Container(
                                             child: Text(
-                                              roundup['title'],
+                                              article.label,
                                               textAlign: TextAlign.center,
                                               style: GoogleFonts.openSans(
                                                   fontSize: 25,
