@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_web_browser/flutter_web_browser.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:html/parser.dart';
 import 'package:http/http.dart';
 
-class Post extends StatelessWidget {
+
+class Post extends StatefulWidget {
   final roundup;
 
   const Post({Key key, this.roundup}) : super(key: key);
 
+  @override
+  _PostState createState() => _PostState();
+}
+
+class _PostState extends State<Post> {
   Future<String> getDocument(url) async {
     var client = Client();
     Response response = await client.get(url);
@@ -31,19 +38,24 @@ class Post extends StatelessWidget {
           backgroundColor: Colors.transparent,
         ),
         body: FutureBuilder(
-          future: getDocument(roundup['url']),
+          future: getDocument(widget.roundup['url']),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (!snapshot.hasData) return Container();
             return Markdown(
-                data: snapshot.data,
-                styleSheet: MarkdownStyleSheet(
-                    p: TextStyle(
-                        fontSize: 18,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w300),
-                    a: TextStyle(
-                        color: Color.fromARGB(255, 29, 161, 242),
-                        backgroundColor: Color.fromRGBO(29, 161, 242, 0.05))));
+              data: snapshot.data,
+              styleSheet: MarkdownStyleSheet(
+                  p: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w300),
+                  a: TextStyle(
+                      color: Color.fromARGB(255, 29, 161, 242),
+                      backgroundColor: Color.fromRGBO(29, 161, 242, 0.05))),
+              onTapLink: (link) {
+                print("link $link");
+                FlutterWebBrowser.openWebPage(url: link, androidToolbarColor: Colors.orangeAccent);
+              },
+            );
           },
         ));
   }

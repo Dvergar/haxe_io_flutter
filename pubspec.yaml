@@ -27,6 +27,7 @@ dependencies:
   http:
   html:
   google_fonts:
+  flutter_web_browser:
 
 dev_dependencies:
   flutter_test:
