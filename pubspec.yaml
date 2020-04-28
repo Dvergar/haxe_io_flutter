@@ -28,6 +28,7 @@ dependencies:
   html:
   google_fonts:
   flutter_web_browser:
+  flutter_spinkit:
 
 dev_dependencies:
   flutter_test:

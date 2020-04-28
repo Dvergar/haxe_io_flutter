@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_web_browser/flutter_web_browser.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:html/parser.dart';
 import 'package:http/http.dart';
-
 
 class Post extends StatefulWidget {
   final roundup;
@@ -40,7 +40,12 @@ class _PostState extends State<Post> {
         body: FutureBuilder(
           future: getDocument(widget.roundup['url']),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (!snapshot.hasData) return Container();
+            if (!snapshot.hasData)
+              return SpinKitChasingDots(
+                color: Colors.orangeAccent,
+                size: 100.0,
+              );
+            ;
             return Markdown(
               data: snapshot.data,
               styleSheet: MarkdownStyleSheet(
@@ -53,7 +58,8 @@ class _PostState extends State<Post> {
                       backgroundColor: Color.fromRGBO(29, 161, 242, 0.05))),
               onTapLink: (link) {
                 print("link $link");
-                FlutterWebBrowser.openWebPage(url: link, androidToolbarColor: Colors.orangeAccent);
+                FlutterWebBrowser.openWebPage(
+                    url: link, androidToolbarColor: Colors.orangeAccent);
               },
             );
           },
