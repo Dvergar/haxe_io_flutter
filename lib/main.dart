@@ -5,6 +5,7 @@ import 'package:html/parser.dart';
 import 'package:http/http.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'my_chip.dart';
 import 'post.dart';
 
 void main() => runApp(MyApp());
@@ -57,11 +58,6 @@ class _MyHomePageState extends State<MyHomePage> {
     }).toList();
   }
 
-  var isSelected = false;
-  var grey = Color.fromRGBO(189, 189, 189, 0.8);
-  var orange = Color.fromARGB(255, 241, 89, 34);
-  var lightOrange = Color.fromRGBO(241, 89, 31, 0.4);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,24 +74,16 @@ class _MyHomePageState extends State<MyHomePage> {
         body: Column(
           children: <Widget>[
             Wrap(
+              alignment: WrapAlignment.spaceAround,
+              spacing: 18,
               children: <Widget>[
-                FilterChip(
-                    label: Text(
-                      "Weekly News",
-                      style: TextStyle(color: isSelected ? orange : grey),
-                    ),
-                    showCheckmark: false,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(3),
-                        side: BorderSide(color: isSelected ? orange : grey)),
-                    selectedColor: lightOrange,
-                    backgroundColor: Colors.transparent,
-                    selected: this.isSelected,
-                    onSelected: (_) {
-                      setState(() {
-                        isSelected = !isSelected;
-                      });
-                    }),
+                MyChip(label: "Weekly News", color: Color.fromARGB(255, 241, 89, 34)),
+                MyChip(label: "Articles", color: Color.fromARGB(255, 71, 99, 152)),
+                MyChip(label: "Releases", color: Color.fromARGB(255, 108, 198, 68)),
+                MyChip(label: "Events", color: Color.fromARGB(255, 255, 128, 0)),
+                MyChip(label: "Ludum Dare", color: Color.fromARGB(255, 119, 68, 204)),
+                MyChip(label: "Developer Interviews", color: Color.fromARGB(255, 255, 128, 0)),
+                MyChip(label: "Videos", color: Color.fromARGB(255, 205, 32, 31)),
               ],
             ),
             Expanded(
