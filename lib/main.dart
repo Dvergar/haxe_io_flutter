@@ -57,6 +57,11 @@ class _MyHomePageState extends State<MyHomePage> {
     }).toList();
   }
 
+  var isSelected = false;
+  var grey = Color.fromRGBO(189, 189, 189, 0.8);
+  var orange = Color.fromARGB(255, 241, 89, 34);
+  var lightOrange = Color.fromRGBO(241, 89, 31, 0.4);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,50 +75,80 @@ class _MyHomePageState extends State<MyHomePage> {
           elevation: 0.0,
           backgroundColor: Colors.transparent,
         ),
-        body: FutureBuilder(
-            future: scrape(),
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (!snapshot.hasData) return Container();
-              List<dynamic> roundups = snapshot.data;
-              return GridView.count(
-                  crossAxisCount: 2,
-                  children: roundups
-                      .map((roundup) => GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          Post(roundup: roundup)));
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                children: <Widget>[
-                                  Container(
-                                      color: Color.fromRGBO(241, 89, 34, 0.8),
-                                      width: 4),
-                                  Container(
-                                      color: Color.fromRGBO(241, 89, 34, 0.4),
-                                      width: 4),
-                                  Expanded(
-                                    child: Container(
-                                      child: Text(
-                                        roundup['title'],
-                                        textAlign: TextAlign.center,
-                                        style: GoogleFonts.openSans(
-                                            fontSize: 25,
-                                            fontWeight: FontWeight.w700,
-                                            color: Color.fromARGB(
-                                                255, 51, 51, 50)),
-                                      ),
+        body: Column(
+          children: <Widget>[
+            Wrap(
+              children: <Widget>[
+                FilterChip(
+                    label: Text(
+                      "Weekly News",
+                      style: TextStyle(color: isSelected ? orange : grey),
+                    ),
+                    showCheckmark: false,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(3),
+                        side: BorderSide(color: isSelected ? orange : grey)),
+                    selectedColor: lightOrange,
+                    backgroundColor: Colors.transparent,
+                    selected: this.isSelected,
+                    onSelected: (_) {
+                      setState(() {
+                        isSelected = !isSelected;
+                      });
+                    }),
+              ],
+            ),
+            Expanded(
+              child: FutureBuilder(
+                  future: scrape(),
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    if (!snapshot.hasData) return Container();
+                    List<dynamic> roundups = snapshot.data;
+                    return GridView.count(
+                        // shrinkWrap: true,
+                        crossAxisCount: 2,
+                        children: roundups
+                            .map((roundup) => GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                Post(roundup: roundup)));
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      children: <Widget>[
+                                        Container(
+                                            color: Color.fromRGBO(
+                                                241, 89, 34, 0.8),
+                                            width: 4),
+                                        Container(
+                                            color: Color.fromRGBO(
+                                                241, 89, 34, 0.4),
+                                            width: 4),
+                                        Expanded(
+                                          child: Container(
+                                            child: Text(
+                                              roundup['title'],
+                                              textAlign: TextAlign.center,
+                                              style: GoogleFonts.openSans(
+                                                  fontSize: 25,
+                                                  fontWeight: FontWeight.w700,
+                                                  color: Color.fromARGB(
+                                                      255, 51, 51, 50)),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
-                          ))
-                      .toList());
-            }));
+                                ))
+                            .toList());
+                  }),
+            ),
+          ],
+        ));
   }
 }
