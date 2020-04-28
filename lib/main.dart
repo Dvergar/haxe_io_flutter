@@ -80,7 +80,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   children: roundups
                       .map((roundup) => GestureDetector(
                             onTap: () {
-                              print("hello");
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
