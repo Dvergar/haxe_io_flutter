@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:haxe_roundups_flutter/item_type.dart';
 
-import 'package:html/dom.dart' as doom;
-import 'package:html/parser.dart';
-import 'package:http/http.dart';
+
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_web_browser/flutter_web_browser.dart';
 
 import 'my_chip.dart';
 import 'post.dart';
+import 'grid_bloc.dart';
 
 void main() => runApp(MyApp());
 
@@ -35,52 +35,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Future getDocument(url) async {
-    var client = Client();
-    Response response = await client.get(url);
-    return parse(response.body);
-  }
 
-  Future<List<dynamic>> scrape() async {
-    var document = await getDocument("https://haxe.io/");
-    List<doom.Element> roundups =
-        document.querySelectorAll('main > ul > li > a');
-
-    getMarkDownLink(String href) {
-      var hrefClean = href.substring(0, href.length - 1);
-      return 'https://raw.githubusercontent.com/skial/haxe.io/master/src/$hrefClean.md';
-    }
-
-    return roundups.map((roundup) {
-      // URL MANIPULATION
-      var href = roundup.attributes['href'];
-      var title = roundup.attributes['title'].replaceAll("â", "№");
-      ItemType type;
-
-      if (href.startsWith('/ld/')) {
-        type = LudumDare(title, getMarkDownLink(href), true);
-      } else if (href.startsWith('/roundups/')) {
-        type = WeeklyNews(title, getMarkDownLink(href), true);
-      } else if (href.startsWith('/releases/')) {
-        type = Releases(title, getMarkDownLink(href), true);
-      } else if (href.startsWith('/wwx/')) // Fragile
-      {
-        type = DeveloperInterviews(title, getMarkDownLink(href), true);
-      } else if (href.startsWith('/videos/')) {
-        type = Videos(title, getMarkDownLink(href), true);
-      } else if (href.startsWith('/events/')) {
-        type = Events(title, getMarkDownLink(href), true);
-      } else if (roundup.parent.id == 'link--video') {
-        type = Videos(title, href, false);
-      } else if (roundup.parent.id == 'event--link') {
-        type = Events(title, href, false);
-      } else {
-        type = Articles(title, href, false);
-      }
-
-      return type;
-    }).toList();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,20 +56,18 @@ class _MyHomePageState extends State<MyHomePage> {
               alignment: WrapAlignment.spaceAround,
               spacing: 18,
               children: <Widget>[
-                MyChip(label: WeeklyNews().typeLabel, color: WeeklyNews().color),
-                MyChip(label: Articles().typeLabel, color: Articles().color),
-                MyChip(label: Releases().typeLabel, color: Releases().color),
-                MyChip(label: Events().typeLabel, color: Events().color),
-                MyChip(label: LudumDare().typeLabel, color: LudumDare().color),
-                MyChip(
-                    label: DeveloperInterviews().typeLabel,
-                    color: DeveloperInterviews().color),
-                MyChip(label: Videos().typeLabel, color: Videos().color),
+                MyChip(type: WeeklyNews()),
+                MyChip(type: Articles()),
+                MyChip(type: Releases()),
+                MyChip(type: Events()),
+                MyChip(type: LudumDare()),
+                MyChip(type: DeveloperInterviews()),
+                MyChip(type: Videos()),
               ],
             ),
             Expanded(
-              child: FutureBuilder(
-                  future: scrape(),
+              child: StreamBuilder(
+                  stream: gridBloc.stream,
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (!snapshot.hasData) return Container();
                     List<ItemType> articles = snapshot.data;
@@ -123,11 +76,18 @@ class _MyHomePageState extends State<MyHomePage> {
                         children: articles
                             .map((article) => GestureDetector(
                                   onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                Post(article: article)));
+                                    if (article.markdown) {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  Post(article: article)));
+                                    } else {
+                                      FlutterWebBrowser.openWebPage(
+                                          url: article.url,
+                                          androidToolbarColor:
+                                              Colors.orangeAccent);
+                                    }
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
