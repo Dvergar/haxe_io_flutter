@@ -1,16 +1,13 @@
-# haxe_roundups_flutter
+# haxe_io_flutter
 
-A new Flutter project.
+_I am not the haxe.io author_
 
-## Getting Started
+Mobile frontend of the haxe.io website.
 
-This project is a starting point for a Flutter application.
+The website is already minimalist, responsive and actually really good as a web page but it was still a fun little covid-19 confinement project.
 
-A few resources to get you started if this is your first Flutter project:
+I am a long time haxe user but as weird as it might sounds the app is actually not made in haxe but in Dart/Flutter which is also an awesome tech.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+Objectives there were to keep the original layout, not using webviews (markdown is actually rendered with the flutter engine) and keeping most functionality.
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+What might be interesting to dig are post edits from the app & push notifications for new posts.
