@@ -6,7 +6,7 @@ _I am not the haxe.io author_
 
 Mobile frontend of the haxe.io website.
 
-The website is already minimalist, responsive and already really good as a web page but it was a fun little covid-19 confinement project.
+The website is minimalist, responsive and already really good as a web page but it was a fun little covid-19 confinement project.
 
 I am a long time haxe user but ironically it's made in Dart/Flutter.
 
