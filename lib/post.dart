@@ -28,8 +28,16 @@ class _PostState extends State<Post> {
 
   Future<String> getMarkdown(url) async {
     var markdown = await getDocument(url);
+    // REPLACE WEIRD TOP CHARACTERS
     markdown = markdown.replaceAll('[“”]: a ""', ''); // What is this ?
-    markdown = markdown.replaceAll('/img/', 'https://raw.githubusercontent.com/skial/haxe.io/master/src/img/');
+    // MUTATE RELATIVE TO ABSOLUTE LINKS
+    markdown = markdown.replaceAll('/img/',
+        'https://raw.githubusercontent.com/skial/haxe.io/master/src/img/');
+    // TRANSFORM IFRAMES TO LINKS
+    markdown =
+        markdown.replaceAllMapped(RegExp(r'!\[iframe\]\((.*)\)'), (match) {
+      return '${match.group(1)}';
+    });
     return markdown;
   }
 
