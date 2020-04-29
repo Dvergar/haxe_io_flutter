@@ -11,3 +11,8 @@ I am a long time haxe user but as weird as it might sounds the app is actually n
 Objectives there were to keep the original layout, not using webviews (markdown is actually rendered with the flutter engine) and keeping most functionality.
 
 What might be interesting to dig are post edits from the app & push notifications for new posts.
+
+## To do
+
+* Make proper link colors for various domains
+* Fix articles filter
