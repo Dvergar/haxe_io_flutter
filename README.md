@@ -1,5 +1,7 @@
 # haxe_io_flutter
 
+[![Codemagic build status](https://api.codemagic.io/apps/5ea9549376654b14d215008b/5ea9549376654b14d215008a/status_badge.svg)](https://codemagic.io/apps/5ea9549376654b14d215008b/5ea9549376654b14d215008a/latest_build)
+
 _I am not the haxe.io author_
 
 Mobile frontend of the haxe.io website.
