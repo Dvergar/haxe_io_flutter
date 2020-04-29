@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:haxe_roundups_flutter/item_type.dart';
+import 'package:haxe_io_flutter/item_type.dart';
 
 import 'grid_bloc.dart';
 

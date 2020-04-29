@@ -1,4 +1,4 @@
-package com.example.haxe_roundups_flutter
+package com.example.haxe_io_flutter
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

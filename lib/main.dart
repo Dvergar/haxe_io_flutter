@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:haxe_roundups_flutter/item_type.dart';
+import 'package:haxe_io_flutter/item_type.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_web_browser/flutter_web_browser.dart';
@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Haxe roundups',
+      title: 'haxe.io',
       theme: ThemeData(
           iconTheme: IconThemeData(color: Colors.red),
           primarySwatch: Colors.grey,

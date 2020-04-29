@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:haxe_roundups_flutter/item_type.dart';
+import 'package:haxe_io_flutter/item_type.dart';
 import 'package:html/dom.dart' as doom;
 import 'package:html/parser.dart';
 import 'package:http/http.dart';
@@ -26,7 +26,7 @@ class GridBloc {
 
   Future<List<dynamic>> scrape() async {
     var document = await getDocument("https://haxe.io/");
-    List<doom.Element> roundups =
+    List<doom.Element> posts =
         document.querySelectorAll('main > ul > li > a');
 
     getMarkDownLink(String href) {
@@ -34,10 +34,10 @@ class GridBloc {
       return 'https://raw.githubusercontent.com/skial/haxe.io/master/src/$hrefClean.md';
     }
 
-    return roundups.map((roundup) {
+    return posts.map((post) {
       // URL MANIPULATION
-      var href = roundup.attributes['href'];
-      var title = roundup.attributes['title'].replaceAll("â", "№");
+      var href = post.attributes['href'];
+      var title = post.attributes['title'].replaceAll("â", "№");
       ItemType type;
 
       if (href.startsWith('/ld/')) {
@@ -55,9 +55,9 @@ class GridBloc {
         type = Videos(title, getMarkDownLink(href), true);
       } else if (href.startsWith('/events/')) {
         type = Events(title, getMarkDownLink(href), true);
-      } else if (roundup.parent.id == 'link--video') {
+      } else if (post.parent.id == 'link--video') {
         type = Videos(title, href, false);
-      } else if (roundup.parent.id == 'event--link') {
+      } else if (post.parent.id == 'event--link') {
         type = Events(title, href, false);
       } else {
         type = Articles(title, href, false);
