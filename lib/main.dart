@@ -115,7 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                             padding: EdgeInsets.all(8),
                                             child: Text(
                                               article.label,
-                                              maxLines: 5,
+                                              maxLines: 4,
                                               overflow: TextOverflow.ellipsis,
                                               textAlign: TextAlign.center,
                                               style: GoogleFonts.openSans(
