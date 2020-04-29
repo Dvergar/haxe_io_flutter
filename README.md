@@ -15,4 +15,5 @@ What might be interesting to dig are post edits from the app & push notification
 ## To do
 
 * Make proper link colors for various domains
+* Make a json renderer for the Ludum Dares
 * Fix articles filter
