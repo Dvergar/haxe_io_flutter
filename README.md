@@ -24,3 +24,4 @@ APKs are available [here](https://github.com/Dvergar/haxe_io_flutter/releases).
 * Make a json renderer for the Ludum Dares
 * Fix articles filter
 * Fix encoding issues
+* Add app icon
