@@ -26,6 +26,17 @@ class _PostState extends State<Post> {
     return parsed.body.text;
   }
 
+  Future<String> getMarkdown(url) async {
+    var markdown = await getDocument(url);
+    markdown = markdown.replaceAll('[“”]: a ""', ''); // What is this ?
+    markdown = markdown.replaceAll('/img/', 'https://raw.githubusercontent.com/skial/haxe.io/master/src/img/');
+    return markdown;
+  }
+
+  Future<String> getJson(url) async {
+    return getDocument(url);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +51,7 @@ class _PostState extends State<Post> {
           backgroundColor: Colors.transparent,
         ),
         body: FutureBuilder(
-          future: getDocument(widget.article.url),
+          future: getMarkdown(widget.article.url),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (!snapshot.hasData)
               return SpinKitChasingDots(

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:haxe_roundups_flutter/item_type.dart';
 
-
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_web_browser/flutter_web_browser.dart';
 
@@ -52,18 +51,21 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         body: Column(
           children: <Widget>[
-            Wrap(
-              alignment: WrapAlignment.spaceAround,
-              spacing: 18,
-              children: <Widget>[
-                MyChip(type: WeeklyNews()),
-                MyChip(type: Articles()),
-                MyChip(type: Releases()),
-                MyChip(type: Events()),
-                MyChip(type: LudumDare()),
-                MyChip(type: DeveloperInterviews()),
-                MyChip(type: Videos()),
-              ],
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Wrap(
+                alignment: WrapAlignment.spaceAround,
+                spacing: 18,
+                children: <Widget>[
+                  MyChip(type: WeeklyNews()),
+                  MyChip(type: Articles()),
+                  MyChip(type: Releases()),
+                  MyChip(type: Events()),
+                  MyChip(type: LudumDare()),
+                  MyChip(type: DeveloperInterviews()),
+                  MyChip(type: Videos()),
+                ],
+              ),
             ),
             Expanded(
               child: StreamBuilder(
@@ -105,6 +107,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                           child: Container(
                                             child: Text(
                                               article.label,
+                                              maxLines: 5,
+                                              overflow: TextOverflow.ellipsis,
                                               textAlign: TextAlign.center,
                                               style: GoogleFonts.openSans(
                                                   fontSize: 25,
