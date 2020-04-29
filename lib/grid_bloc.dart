@@ -27,8 +27,7 @@ class GridBloc {
 
   Future<List<dynamic>> scrape() async {
     var document = await getDocument("https://haxe.io/");
-    List<doom.Element> posts =
-        document.querySelectorAll('main > ul > li > a');
+    List<doom.Element> posts = document.querySelectorAll('main > ul > li > a');
 
     getMarkDownLink(String href) {
       var hrefClean = href.substring(0, href.length - 1);
@@ -69,16 +68,23 @@ class GridBloc {
   }
 
   sortBy(ItemType chip) {
+    // ADD/REMOVE FILTERS
     if (!filters.contains(chip.runtimeType)) {
       filters.add(chip.runtimeType);
     } else {
       filters.remove(chip.runtimeType);
     }
 
+    // ALL ITEMS
+    if (filters.length == 0) {
+      gridController.sink.add(this.items);
+      return;
+    }
+
+    // DO FILTER
     var filteredItems =
         this.items.where((item) => filters.contains(item.runtimeType)).toList();
     gridController.sink.add(filteredItems);
-    print("sortby");
   }
 
   void dispose() {
