@@ -51,7 +51,7 @@ class _PostState extends State<Post> {
         appBar: AppBar(
           centerTitle: true,
           title: Text(
-            "haxe.io",
+            widget.article.typeLabel,
             style: GoogleFonts.gentiumBookBasic(
                 color: Color.fromARGB(255, 51, 51, 50), fontSize: 30),
           ),
