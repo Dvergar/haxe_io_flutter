@@ -105,6 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                             width: 4),
                                         Expanded(
                                           child: Container(
+                                            padding: EdgeInsets.all(8),
                                             child: Text(
                                               article.label,
                                               maxLines: 5,
