@@ -48,7 +48,9 @@ class GridBloc {
         type = Releases(title, getMarkDownLink(href), true);
       } else if (href.startsWith('/wwx/')) // Fragile
       {
-        type = DeveloperInterviews(title, getMarkDownLink(href), true);
+        var mdLink = getMarkDownLink(href);
+        mdLink = mdLink.replaceAll("-", " ");
+        type = DeveloperInterviews(title, mdLink, true);
       } else if (href.startsWith('/videos/')) {
         type = Videos(title, getMarkDownLink(href), true);
       } else if (href.startsWith('/events/')) {
@@ -66,17 +68,14 @@ class GridBloc {
   }
 
   sortBy(ItemType chip) {
-
-    if(!filters.contains(chip.runtimeType))
-    {
+    if (!filters.contains(chip.runtimeType)) {
       filters.add(chip.runtimeType);
-    }
-    else
-    {
+    } else {
       filters.remove(chip.runtimeType);
     }
-    
-    var filteredItems = this.items.where((item) => filters.contains(item.runtimeType)).toList();
+
+    var filteredItems =
+        this.items.where((item) => filters.contains(item.runtimeType)).toList();
     gridController.sink.add(filteredItems);
     print("sortby");
   }
