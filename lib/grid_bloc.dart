@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:haxe_io_flutter/item_type.dart';
 import 'package:html/dom.dart' as doom;
 import 'package:html/parser.dart';
@@ -21,7 +22,7 @@ class GridBloc {
   Future getDocument(url) async {
     var client = Client();
     Response response = await client.get(url);
-    return parse(response.body);
+    return parse(utf8.decode(response.bodyBytes));
   }
 
   Future<List<dynamic>> scrape() async {
@@ -37,7 +38,7 @@ class GridBloc {
     return posts.map((post) {
       // URL MANIPULATION
       var href = post.attributes['href'];
-      var title = post.attributes['title'].replaceAll("â", "№");
+      var title = post.attributes['title'];
       ItemType type;
 
       if (href.startsWith('/ld/')) {
