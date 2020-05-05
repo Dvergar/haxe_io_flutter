@@ -110,25 +110,24 @@ class _MyHomePageState extends State<MyHomePage> {
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(2.0),
-                                                                      child: Container(
+                                    child: Container(
                                       decoration: BoxDecoration(
-                                        color:
-                                            HSLColor.fromAHSL(0.8, 47, 0.36, 0.95)
-                                                .toColor(),
+                                        color: HSLColor.fromAHSL(
+                                                0.8, 47, 0.36, 0.95)
+                                            .toColor(),
                                         border: Border(
                                           bottom: BorderSide(
-                                            color:
-                                                HSLColor.fromAHSL(0.3, 0, 0, 0.74)
-                                                    .toColor(),
+                                            color: HSLColor.fromAHSL(
+                                                    0.3, 0, 0, 0.74)
+                                                .toColor(),
                                             width: 1.0,
                                           ),
                                           right: BorderSide(
-                                            color:
-                                                HSLColor.fromAHSL(0.3, 0, 0, 0.74)
-                                                    .toColor(),
+                                            color: HSLColor.fromAHSL(
+                                                    0.3, 0, 0, 0.74)
+                                                .toColor(),
                                             width: 1.0,
                                           ),
                                         ),
@@ -136,12 +135,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                       child: Row(
                                         children: <Widget>[
                                           Container(
-                                              color:
-                                                  article.color.withOpacity(0.8),
+                                              color: article.color
+                                                  .withOpacity(0.8),
                                               width: 4),
                                           Container(
-                                              color:
-                                                  article.color.withOpacity(0.4),
+                                              color: article.color
+                                                  .withOpacity(0.4),
                                               width: 4),
                                           Expanded(
                                             child: Padding(
