@@ -141,7 +141,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                                 article.color.withOpacity(0.4),
                                             width: 4),
                                         Expanded(
-                                          child: Container(
+                                          child: Padding(
+                                            padding: EdgeInsets.all(8),
                                             child: Text(
                                               article.label,
                                               maxLines: 4,
