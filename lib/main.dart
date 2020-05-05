@@ -111,9 +111,25 @@ class _MyHomePageState extends State<MyHomePage> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Container(
-                                    color:
-                                        HSLColor.fromAHSL(0.8, 47, 0.36, 0.95)
-                                            .toColor(),
+                                    decoration: BoxDecoration(
+                                      color:
+                                          HSLColor.fromAHSL(0.8, 47, 0.36, 0.95)
+                                              .toColor(),
+                                      border: Border(
+                                        bottom: BorderSide(
+                                          color:
+                                              HSLColor.fromAHSL(0.3, 0, 0, 0.74)
+                                                  .toColor(),
+                                          width: 1.0,
+                                        ),
+                                        right: BorderSide(
+                                          color:
+                                              HSLColor.fromAHSL(0.3, 0, 0, 0.74)
+                                                  .toColor(),
+                                          width: 1.0,
+                                        ),
+                                      ),
+                                    ),
                                     child: Row(
                                       children: <Widget>[
                                         Container(
