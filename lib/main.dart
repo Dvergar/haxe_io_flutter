@@ -18,7 +18,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           iconTheme: IconThemeData(color: Colors.red),
           primarySwatch: Colors.grey,
-          scaffoldBackgroundColor: Color.fromARGB(255, 255, 253, 249)),
+          // scaffoldBackgroundColor: Color.fromARGB(255, 255, 253, 249)),
+          scaffoldBackgroundColor: Color(0xfffffdf9)),
       home: MyHomePage(title: 'haxe.io'),
     );
   }
@@ -90,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   if (!snapshot.hasData) return Container();
                   List<ItemType> articles = snapshot.data;
                   return GridView.count(
-                      controller: _controller,
+                      controller: _scrollController,
                       crossAxisCount: 2,
                       children: articles
                           .map((article) => GestureDetector(
