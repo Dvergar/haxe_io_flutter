@@ -71,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
             padding: const EdgeInsets.all(10.0),
             child: Wrap(
               alignment: WrapAlignment.spaceAround,
-              spacing: 18,
+              spacing: 15,
               children: <Widget>[
                 MyChip(type: WeeklyNews()),
                 MyChip(type: Articles()),
