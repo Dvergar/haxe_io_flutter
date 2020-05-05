@@ -110,31 +110,37 @@ class _MyHomePageState extends State<MyHomePage> {
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: <Widget>[
-                                      Container(
-                                          color: article.color.withOpacity(0.8),
-                                          width: 4),
-                                      Container(
-                                          color: article.color.withOpacity(0.4),
-                                          width: 4),
-                                      Expanded(
-                                        child: Container(
-                                          padding: EdgeInsets.all(8),
-                                          child: Text(
-                                            article.label,
-                                            maxLines: 4,
-                                            overflow: TextOverflow.ellipsis,
-                                            textAlign: TextAlign.center,
-                                            style: GoogleFonts.openSans(
-                                                fontSize: 25,
-                                                fontWeight: FontWeight.w700,
-                                                color: Color.fromARGB(
-                                                    255, 51, 51, 50)),
+                                  child: Container(
+                                    color:
+                                        HSLColor.fromAHSL(0.8, 47, 0.36, 0.95)
+                                            .toColor(),
+                                    child: Row(
+                                      children: <Widget>[
+                                        Container(
+                                            color:
+                                                article.color.withOpacity(0.8),
+                                            width: 4),
+                                        Container(
+                                            color:
+                                                article.color.withOpacity(0.4),
+                                            width: 4),
+                                        Expanded(
+                                          child: Container(
+                                            child: Text(
+                                              article.label,
+                                              maxLines: 4,
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.center,
+                                              style: GoogleFonts.openSans(
+                                                  fontSize: 25,
+                                                  fontWeight: FontWeight.w700,
+                                                  color: Color.fromARGB(
+                                                      255, 51, 51, 50)),
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ))
