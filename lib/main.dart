@@ -34,18 +34,19 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
+  ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CustomAppBar(
         appBar: AppBar(
           centerTitle: true,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Image.asset("assets/icon.png", height:30),
-              SizedBox(width:10),
+              Image.asset("assets/icon.png", height: 30),
+              SizedBox(width: 10),
               Text(
                 widget.title,
                 style: GoogleFonts.gentiumBookBasic(
@@ -56,84 +57,108 @@ class _MyHomePageState extends State<MyHomePage> {
           elevation: 0.0,
           backgroundColor: Colors.transparent,
         ),
-        body: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Wrap(
-                alignment: WrapAlignment.spaceAround,
-                spacing: 18,
-                children: <Widget>[
-                  MyChip(type: WeeklyNews()),
-                  MyChip(type: Articles()),
-                  MyChip(type: Releases()),
-                  MyChip(type: Events()),
-                  MyChip(type: LudumDare()),
-                  MyChip(type: DeveloperInterviews()),
-                  MyChip(type: Videos()),
-                ],
-              ),
+        onTap: () {
+          _scrollController.animateTo(
+            0.0,
+            curve: Curves.easeOut,
+            duration: const Duration(milliseconds: 300),
+          );
+        },
+      ),
+      body: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Wrap(
+              alignment: WrapAlignment.spaceAround,
+              spacing: 18,
+              children: <Widget>[
+                MyChip(type: WeeklyNews()),
+                MyChip(type: Articles()),
+                MyChip(type: Releases()),
+                MyChip(type: Events()),
+                MyChip(type: LudumDare()),
+                MyChip(type: DeveloperInterviews()),
+                MyChip(type: Videos()),
+              ],
             ),
-            Expanded(
-              child: StreamBuilder(
-                  stream: gridBloc.stream,
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    if (!snapshot.hasData) return Container();
-                    List<ItemType> articles = snapshot.data;
-                    return GridView.count(
-                        crossAxisCount: 2,
-                        children: articles
-                            .map((article) => GestureDetector(
-                                  onTap: () {
-                                    if (article.markdown) {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  Post(article: article)));
-                                    } else {
-                                      FlutterWebBrowser.openWebPage(
-                                          url: article.url,
-                                          androidToolbarColor:
-                                              Colors.orangeAccent);
-                                    }
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
-                                      children: <Widget>[
-                                        Container(
-                                            color:
-                                                article.color.withOpacity(0.8),
-                                            width: 4),
-                                        Container(
-                                            color:
-                                                article.color.withOpacity(0.4),
-                                            width: 4),
-                                        Expanded(
-                                          child: Container(
-                                            padding: EdgeInsets.all(8),
-                                            child: Text(
-                                              article.label,
-                                              maxLines: 4,
-                                              overflow: TextOverflow.ellipsis,
-                                              textAlign: TextAlign.center,
-                                              style: GoogleFonts.openSans(
-                                                  fontSize: 25,
-                                                  fontWeight: FontWeight.w700,
-                                                  color: Color.fromARGB(
-                                                      255, 51, 51, 50)),
-                                            ),
+          ),
+          Expanded(
+            child: StreamBuilder(
+                stream: gridBloc.stream,
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  if (!snapshot.hasData) return Container();
+                  List<ItemType> articles = snapshot.data;
+                  return GridView.count(
+                      controller: _controller,
+                      crossAxisCount: 2,
+                      children: articles
+                          .map((article) => GestureDetector(
+                                onTap: () {
+                                  if (article.markdown) {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                Post(article: article)));
+                                  } else {
+                                    FlutterWebBrowser.openWebPage(
+                                        url: article.url,
+                                        androidToolbarColor:
+                                            Colors.orangeAccent);
+                                  }
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Container(
+                                          color: article.color.withOpacity(0.8),
+                                          width: 4),
+                                      Container(
+                                          color: article.color.withOpacity(0.4),
+                                          width: 4),
+                                      Expanded(
+                                        child: Container(
+                                          padding: EdgeInsets.all(8),
+                                          child: Text(
+                                            article.label,
+                                            maxLines: 4,
+                                            overflow: TextOverflow.ellipsis,
+                                            textAlign: TextAlign.center,
+                                            style: GoogleFonts.openSans(
+                                                fontSize: 25,
+                                                fontWeight: FontWeight.w700,
+                                                color: Color.fromARGB(
+                                                    255, 51, 51, 50)),
                                           ),
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
-                                ))
-                            .toList());
-                  }),
-            ),
-          ],
-        ));
+                                ),
+                              ))
+                          .toList());
+                }),
+          ),
+        ],
+      ),
+    );
   }
+}
+
+// Custom appbar to add onTap
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final VoidCallback onTap;
+  final AppBar appBar;
+
+  const CustomAppBar({Key key, this.onTap, this.appBar}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(onTap: onTap, child: appBar);
+  }
+
+  @override
+  Size get preferredSize => new Size.fromHeight(kToolbarHeight);
 }
