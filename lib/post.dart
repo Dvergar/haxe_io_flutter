@@ -748,48 +748,57 @@ class _PostState extends State<Post> {
         if (frameworkName == 'Haxe' && game['frameworks'].length > 1)
           continue; // FRAGILE
 
-        var gameType = '${game['type'][0].toUpperCase()}${game['type'].substring(1)}';
+        var gameType =
+            '${game['type'][0].toUpperCase()}${game['type'].substring(1)}';
         var typeColor = jamColor;
-        if(gameType == 'Compo') typeColor = compoColor;
+        if (gameType == 'Compo') typeColor = compoColor;
 
         widgets.add(
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              RichText(
-                text: TextSpan(
-                  style: TextStyle(fontSize: pFontSize, color: Colors.black),
-                  children: <TextSpan>[
-                    TextSpan(
-                        text: game['name'],
-                        style: TextStyle(
-                            color: aColor, backgroundColor: aBackgroundColor),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () => FlutterWebBrowser.openWebPage(
-                              url:
-                                  "http://ludumdare.com/compo/ludum-dare-37/${game['url']}",
-                              androidToolbarColor: Colors.orangeAccent)),
-                    TextSpan(text: ' by '),
-                    TextSpan(
-                        text: game['author']['name'],
-                        style: TextStyle(
-                            color: aColor, backgroundColor: aBackgroundColor),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () => FlutterWebBrowser.openWebPage(
-                              url:
-                                  "http://ludumdare.com/compo${game['author']['url']}",
-                              androidToolbarColor: Colors.orangeAccent)),
-                  ],
+              Flexible(
+                child: RichText(
+                  text: TextSpan(
+                    style: TextStyle(fontSize: pFontSize, color: Colors.black),
+                    children: <TextSpan>[
+                      TextSpan(
+                          text: game['name'],
+                          style: TextStyle(
+                              color: aColor, backgroundColor: aBackgroundColor),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () => FlutterWebBrowser.openWebPage(
+                                url:
+                                    "http://ludumdare.com/compo/ludum-dare-37/${game['url']}",
+                                androidToolbarColor: Colors.orangeAccent)),
+                      TextSpan(text: ' by '),
+                      TextSpan(
+                          text: game['author']['name'],
+                          style: TextStyle(
+                              color: aColor, backgroundColor: aBackgroundColor),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () => FlutterWebBrowser.openWebPage(
+                                url:
+                                    "http://ludumdare.com/compo${game['author']['url']}",
+                                androidToolbarColor: Colors.orangeAccent)),
+                    ],
+                  ),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(bottom:6),
+                padding: const EdgeInsets.only(bottom: 6),
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal:5, vertical:2),
-                  decoration: BoxDecoration(
-                    color: typeColor.withOpacity(0.3),
-                    borderRadius: BorderRadius.circular(2.0)),
-                  child:Text(gameType, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: typeColor),)),
+                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                    decoration: BoxDecoration(
+                        color: typeColor.withOpacity(0.3),
+                        borderRadius: BorderRadius.circular(2.0)),
+                    child: Text(
+                      gameType,
+                      style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                          color: typeColor),
+                    )),
               )
             ],
           ),
@@ -832,7 +841,7 @@ class _PostState extends State<Post> {
           elevation: 0.0,
           backgroundColor: Colors.transparent,
         ),
-        body: Column(
+        body: ListView(
           children: <Widget>[
             FutureBuilder(
               future: getMarkdown(widget.article.url),
