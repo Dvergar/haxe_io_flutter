@@ -721,11 +721,14 @@ class _PostState extends State<Post> {
     Response response = await client.get(url);
     var parsed = parse(response.body);
 
+
     return parsed.body.text;
   }
 
-  getJson(String data) {
-    var widgets = [];
+  List<Widget> parseJson(String data) {
+    List<Widget> widgets = [];
+
+    print("DATA $data");
 
     Map<dynamic, dynamic> decodedJson = json.decode(data);
 
@@ -824,9 +827,9 @@ class _PostState extends State<Post> {
     return markdown;
   }
 
-  // Future<String> getJson(url) async {
-  //   return getDocument(url);
-  // }
+  Future<List<Widget>> getJson(url) async {
+    return parseJson(await getDocument(url));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -842,6 +845,7 @@ class _PostState extends State<Post> {
           backgroundColor: Colors.transparent,
         ),
         body: ListView(
+          shrinkWrap: true,
           children: <Widget>[
             FutureBuilder(
               future: getMarkdown(widget.article.url),
@@ -870,18 +874,28 @@ class _PostState extends State<Post> {
                 );
               },
             ),
-            Expanded(
+            widget.article.jsonUrl != null? Expanded(
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 18),
                 alignment: Alignment.centerLeft,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    ...getJson(ldJson),
-                  ],
+                child: FutureBuilder<List<Widget>>(
+                  future: getJson(widget.article.jsonUrl),
+                  builder: (context, snapshot) {
+                            if (!snapshot.hasData)
+                  return SpinKitChasingDots(
+                    color: Colors.orangeAccent,
+                    size: 100.0,
+                  );
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        ...snapshot.data,
+                      ],
+                    );
+                  }
                 ),
               ),
-            )
+            ):Container()
           ],
         ));
   }

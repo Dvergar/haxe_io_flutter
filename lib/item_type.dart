@@ -5,9 +5,10 @@ abstract class ItemType {
   String typeLabel;
   String label;
   String url;
+  String jsonUrl;
   bool markdown;
 
-  ItemType([this.label, this.url, this.markdown]);
+  ItemType([this.label, this.url, this.markdown, this.jsonUrl]);
 }
 
 class WeeklyNews extends ItemType {
@@ -46,8 +47,8 @@ class LudumDare extends ItemType {
   var typeLabel = "LudumDare";
   var color = Color.fromARGB(255, 119, 68, 204);
 
-  LudumDare([String label, String url, bool markdown])
-      : super(label, url, markdown);
+  LudumDare([String label, String url, bool markdown, String jsonUrl])
+      : super(label, url, markdown, jsonUrl);
 }
 
 class DeveloperInterviews extends ItemType {

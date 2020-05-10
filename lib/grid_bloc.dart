@@ -34,6 +34,11 @@ class GridBloc {
       return 'https://raw.githubusercontent.com/skial/haxe.io/master/src/$hrefClean.md';
     }
 
+      getJsonLink(String href) {
+      var hrefClean = href.substring(0, href.length - 1);
+      return 'https://raw.githubusercontent.com/skial/haxe.io/master/src/data$hrefClean.json';
+    }
+
     return posts.map((post) {
       // URL MANIPULATION
       var href = post.attributes['href'];
@@ -41,7 +46,11 @@ class GridBloc {
       ItemType type;
 
       if (href.startsWith('/ld/')) {
-        type = LudumDare(title, getMarkDownLink(href), true);
+        var jsonUrl;
+        if(href == '/ld/36/') jsonUrl = 'https://raw.githubusercontent.com/skial/haxe.io/master/src/data/ld36.json';
+        if(href == '/ld/37/') jsonUrl = 'https://raw.githubusercontent.com/skial/haxe.io/master/src/data/ld37.json';
+
+        type = LudumDare(title, getMarkDownLink(href), true, jsonUrl);
       } else if (href.startsWith('/roundups/')) {
         type = WeeklyNews(title, getMarkDownLink(href), true);
       } else if (href.startsWith('/releases/')) {
