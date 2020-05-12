@@ -721,7 +721,6 @@ class _PostState extends State<Post> {
     Response response = await client.get(url);
     var parsed = parse(response.body);
 
-
     return parsed.body.text;
   }
 
@@ -844,59 +843,61 @@ class _PostState extends State<Post> {
           elevation: 0.0,
           backgroundColor: Colors.transparent,
         ),
-        body: ListView(
-          shrinkWrap: true,
-          children: <Widget>[
-            FutureBuilder(
-              future: getMarkdown(widget.article.url),
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                if (!snapshot.hasData)
-                  return SpinKitChasingDots(
-                    color: Colors.orangeAccent,
-                    size: 100.0,
-                  );
-
-                return Markdown(
-                  shrinkWrap: true,
-                  data: snapshot.data,
-                  styleSheet: MarkdownStyleSheet(
-                      p: TextStyle(
-                          fontSize: pFontSize,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w300),
-                      a: TextStyle(
-                          color: aColor, backgroundColor: aBackgroundColor)),
-                  onTapLink: (link) {
-                    print("link $link");
-                    FlutterWebBrowser.openWebPage(
-                        url: link, androidToolbarColor: Colors.orangeAccent);
-                  },
-                );
-              },
-            ),
-            widget.article.jsonUrl != null? Expanded(
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 18),
-                alignment: Alignment.centerLeft,
-                child: FutureBuilder<List<Widget>>(
-                  future: getJson(widget.article.jsonUrl),
-                  builder: (context, snapshot) {
-                            if (!snapshot.hasData)
-                  return SpinKitChasingDots(
-                    color: Colors.orangeAccent,
-                    size: 100.0,
-                  );
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        ...snapshot.data,
-                      ],
+        body: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              FutureBuilder(
+                future: getMarkdown(widget.article.url),
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  if (!snapshot.hasData)
+                    return SpinKitChasingDots(
+                      color: Colors.orangeAccent,
+                      size: 100.0,
                     );
-                  }
-                ),
+
+                  return Markdown(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    data: snapshot.data,
+                    styleSheet: MarkdownStyleSheet(
+                        p: TextStyle(
+                            fontSize: pFontSize,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w300),
+                        a: TextStyle(
+                            color: aColor, backgroundColor: aBackgroundColor)),
+                    onTapLink: (link) {
+                      print("link $link");
+                      FlutterWebBrowser.openWebPage(
+                          url: link, androidToolbarColor: Colors.orangeAccent);
+                    },
+                  );
+                },
               ),
-            ):Container()
-          ],
+              widget.article.jsonUrl != null
+                  ? Container(
+                      padding: EdgeInsets.symmetric(horizontal: 18),
+                      alignment: Alignment.centerLeft,
+                      child: FutureBuilder<List<Widget>>(
+                          future: getJson(widget.article.jsonUrl),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData)
+                              return SpinKitChasingDots(
+                                color: Colors.orangeAccent,
+                                size: 100.0,
+                              );
+                            return Column(
+                              mainAxisSize: MainAxisSize.max,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                ...snapshot.data,
+                              ],
+                            );
+                          }),
+                    )
+                  : Container()
+            ],
+          ),
         ));
   }
 }
