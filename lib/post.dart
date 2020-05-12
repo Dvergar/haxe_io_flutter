@@ -737,7 +737,7 @@ class _PostState extends State<Post> {
 
       widgets.add(Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
-        child: Text(frameworkName, style: TextStyle(fontSize: 30)),
+        child: Text(frameworkName, style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xff333332))),
       ));
 
       var games = entries.where((entry) {
@@ -764,6 +764,7 @@ class _PostState extends State<Post> {
                   text: TextSpan(
                     style: TextStyle(fontSize: pFontSize, color: Colors.black),
                     children: <TextSpan>[
+                      TextSpan(text:"    ⬤    ", style:TextStyle(fontSize: 10, color: Color(0xff333332))),
                       TextSpan(
                           text: game['name'],
                           style: TextStyle(
