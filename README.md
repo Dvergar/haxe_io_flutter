@@ -21,3 +21,6 @@ APKs are available [here](https://github.com/Dvergar/haxe_io_flutter/releases).
 ## To do
 
 * Make proper link colors for various domains
+
+## Screenshot
+<img src="https://raw.githubusercontent.com/Dvergar/haxe_io_flutter/master/screenshot.png" width="400">
