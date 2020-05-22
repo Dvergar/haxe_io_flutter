@@ -737,7 +737,11 @@ class _PostState extends State<Post> {
 
       widgets.add(Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
-        child: Text(frameworkName, style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xff333332))),
+        child: Text(frameworkName,
+            style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Color(0xff333332))),
       ));
 
       var games = entries.where((entry) {
@@ -764,7 +768,10 @@ class _PostState extends State<Post> {
                   text: TextSpan(
                     style: TextStyle(fontSize: pFontSize, color: Colors.black),
                     children: <TextSpan>[
-                      TextSpan(text:"    ⬤    ", style:TextStyle(fontSize: 10, color: Color(0xff333332))),
+                      TextSpan(
+                          text: "    ⬤    ",
+                          style: TextStyle(
+                              fontSize: 10, color: Color(0xff333332))),
                       TextSpan(
                           text: game['name'],
                           style: TextStyle(
@@ -856,22 +863,26 @@ class _PostState extends State<Post> {
                       size: 100.0,
                     );
 
-                  return Markdown(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    data: snapshot.data,
-                    styleSheet: MarkdownStyleSheet(
-                        p: TextStyle(
-                            fontSize: pFontSize,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w300),
-                        a: TextStyle(
-                            color: aColor, backgroundColor: aBackgroundColor)),
-                    onTapLink: (link) {
-                      print("link $link");
-                      FlutterWebBrowser.openWebPage(
-                          url: link, androidToolbarColor: Colors.orangeAccent);
-                    },
+                  return Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: MarkdownBody(
+                      shrinkWrap: true,
+                      data: snapshot.data,
+                      styleSheet: MarkdownStyleSheet(
+                          p: TextStyle(
+                              fontSize: pFontSize,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w300),
+                          a: TextStyle(
+                              color: aColor,
+                              backgroundColor: aBackgroundColor)),
+                      onTapLink: (link) {
+                        print("link $link");
+                        FlutterWebBrowser.openWebPage(
+                            url: link,
+                            androidToolbarColor: Colors.orangeAccent);
+                      },
+                    ),
                   );
                 },
               ),
