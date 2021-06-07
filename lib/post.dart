@@ -718,7 +718,7 @@ class Post extends StatefulWidget {
 class _PostState extends State<Post> {
   Future<String> getDocument(url) async {
     var client = Client();
-    Response response = await client.get(url);
+    Response response = await client.get(Uri.parse(url));
     var parsed = parse(response.body);
 
     return parsed.body.text;
