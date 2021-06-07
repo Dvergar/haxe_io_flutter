@@ -103,9 +103,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                                 Post(article: article)));
                                   } else {
                                     FlutterWebBrowser.openWebPage(
-                                        url: article.url,
-                                        androidToolbarColor:
-                                            Colors.orangeAccent);
+                                      url: article.url,
+                                      customTabsOptions: CustomTabsOptions(
+                                          toolbarColor: Colors.orangeAccent),
+                                      // androidToolbarColor:
+                                      //     Colors.orangeAccent
+                                    );
                                   }
                                 },
                                 child: Padding(

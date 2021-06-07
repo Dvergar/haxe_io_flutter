@@ -780,7 +780,10 @@ class _PostState extends State<Post> {
                             ..onTap = () => FlutterWebBrowser.openWebPage(
                                 url:
                                     "http://ludumdare.com/compo/ludum-dare-37/${game['url']}",
-                                androidToolbarColor: Colors.orangeAccent)),
+                                customTabsOptions: CustomTabsOptions(
+                                    toolbarColor: Colors.orangeAccent)
+                                // androidToolbarColor: Colors.orangeAccent
+                                )),
                       TextSpan(text: ' by '),
                       TextSpan(
                           text: game['author']['name'],
@@ -790,7 +793,10 @@ class _PostState extends State<Post> {
                             ..onTap = () => FlutterWebBrowser.openWebPage(
                                 url:
                                     "http://ludumdare.com/compo${game['author']['url']}",
-                                androidToolbarColor: Colors.orangeAccent)),
+                                customTabsOptions: CustomTabsOptions(
+                                    toolbarColor: Colors.orangeAccent)
+                                // androidToolbarColor: Colors.orangeAccent
+                                )),
                     ],
                   ),
                 ),
@@ -876,11 +882,13 @@ class _PostState extends State<Post> {
                           a: TextStyle(
                               color: aColor,
                               backgroundColor: aBackgroundColor)),
-                      onTapLink: (link) {
+                      onTapLink: (text, link, title) {
                         print("link $link");
                         FlutterWebBrowser.openWebPage(
                             url: link,
-                            androidToolbarColor: Colors.orangeAccent);
+                            // androidToolbarColor: Colors.orangeAccent
+                            customTabsOptions: CustomTabsOptions(
+                                toolbarColor: Colors.orangeAccent));
                       },
                     ),
                   );

@@ -21,7 +21,7 @@ class GridBloc {
 
   Future getDocument(url) async {
     var client = Client();
-    Response response = await client.get(url);
+    Response response = await client.get(Uri.parse(url));
     return parse(utf8.decode(response.bodyBytes));
   }
 
@@ -34,7 +34,7 @@ class GridBloc {
       return 'https://raw.githubusercontent.com/skial/haxe.io/master/src/$hrefClean.md';
     }
 
-      getJsonLink(String href) {
+    getJsonLink(String href) {
       var hrefClean = href.substring(0, href.length - 1);
       return 'https://raw.githubusercontent.com/skial/haxe.io/master/src/data$hrefClean.json';
     }
@@ -47,8 +47,12 @@ class GridBloc {
 
       if (href.startsWith('/ld/')) {
         var jsonUrl;
-        if(href == '/ld/36/') jsonUrl = 'https://raw.githubusercontent.com/skial/haxe.io/master/src/data/ld36.json';
-        if(href == '/ld/37/') jsonUrl = 'https://raw.githubusercontent.com/skial/haxe.io/master/src/data/ld37.json';
+        if (href == '/ld/36/')
+          jsonUrl =
+              'https://raw.githubusercontent.com/skial/haxe.io/master/src/data/ld36.json';
+        if (href == '/ld/37/')
+          jsonUrl =
+              'https://raw.githubusercontent.com/skial/haxe.io/master/src/data/ld37.json';
 
         type = LudumDare(title, getMarkDownLink(href), true, jsonUrl);
       } else if (href.startsWith('/roundups/')) {
