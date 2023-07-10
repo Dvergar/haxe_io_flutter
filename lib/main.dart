@@ -16,18 +16,19 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'haxe.io',
       theme: ThemeData(
-          iconTheme: IconThemeData(color: Colors.red),
-          primarySwatch: Colors.grey,
-          scaffoldBackgroundColor: Color(0xfffffdf9)),
+        iconTheme: IconThemeData(color: Colors.red),
+        primarySwatch: Colors.grey,
+        scaffoldBackgroundColor: Color(0xfffffdf9),
+      ),
       home: MyHomePage(title: 'haxe.io'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
   final String title;
+
+  MyHomePage({Key? key, required this.title}) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -49,7 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
               SizedBox(width: 10),
               Text(
                 widget.title,
-                style: GoogleFonts.gentiumBookBasic(
+                style: GoogleFonts.gentiumBookPlus(
                     color: Color.fromARGB(255, 51, 51, 50), fontSize: 30),
               ),
             ],
@@ -73,13 +74,13 @@ class _MyHomePageState extends State<MyHomePage> {
               alignment: WrapAlignment.spaceAround,
               spacing: 15,
               children: <Widget>[
-                MyChip(type: WeeklyNews()),
-                MyChip(type: Articles()),
-                MyChip(type: Releases()),
-                MyChip(type: Events()),
-                MyChip(type: LudumDare()),
-                MyChip(type: DeveloperInterviews()),
-                MyChip(type: Videos()),
+                MyChip(view: WeeklyNews()),
+                MyChip(view: Articles()),
+                MyChip(view: Releases()),
+                MyChip(view: Events()),
+                MyChip(view: LudumDare()),
+                MyChip(view: DeveloperInterviews()),
+                MyChip(view: Videos()),
               ],
             ),
           ),
@@ -88,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 stream: gridBloc.stream,
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                   if (!snapshot.hasData) return Container();
-                  List<ItemType> articles = snapshot.data;
+                  List<ItemModel> articles = snapshot.data;
                   return GridView.count(
                       controller: _scrollController,
                       crossAxisCount: 2,
@@ -138,11 +139,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                       child: Row(
                                         children: <Widget>[
                                           Container(
-                                              color: article.color
+                                              color: Articles()
+                                                  .color
                                                   .withOpacity(0.8),
                                               width: 4),
                                           Container(
-                                              color: article.color
+                                              color: Articles()
+                                                  .color
                                                   .withOpacity(0.4),
                                               width: 4),
                                           Expanded(
@@ -181,7 +184,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onTap;
   final AppBar appBar;
 
-  const CustomAppBar({Key key, this.onTap, this.appBar}) : super(key: key);
+  const CustomAppBar({
+    Key? key,
+    required this.onTap,
+    required this.appBar,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

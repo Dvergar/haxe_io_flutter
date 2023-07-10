@@ -707,9 +707,9 @@ var ldJson = '''
 ''';
 
 class Post extends StatefulWidget {
-  final ItemType article;
+  final ItemModel article;
 
-  Post({Key key, this.article}) : super(key: key);
+  Post({Key? key, required this.article}) : super(key: key);
 
   @override
   _PostState createState() => _PostState();
@@ -721,7 +721,8 @@ class _PostState extends State<Post> {
     Response response = await client.get(Uri.parse(url));
     var parsed = parse(response.body);
 
-    return parsed.body.text;
+    // TODO handle null
+    return parsed.body!.text;
   }
 
   List<Widget> parseJson(String data) {
@@ -850,8 +851,8 @@ class _PostState extends State<Post> {
         appBar: AppBar(
           centerTitle: true,
           title: Text(
-            widget.article.typeLabel,
-            style: GoogleFonts.gentiumBookBasic(
+            Articles().typeLabel,
+            style: GoogleFonts.gentiumBookPlus(
                 color: Color.fromARGB(255, 51, 51, 50), fontSize: 30),
           ),
           elevation: 0.0,
@@ -885,7 +886,8 @@ class _PostState extends State<Post> {
                       onTapLink: (text, link, title) {
                         print("link $link");
                         FlutterWebBrowser.openWebPage(
-                            url: link,
+                            // TODO: double-check null
+                            url: link!,
                             // androidToolbarColor: Colors.orangeAccent
                             customTabsOptions: CustomTabsOptions(
                                 toolbarColor: Colors.orangeAccent));
@@ -910,7 +912,8 @@ class _PostState extends State<Post> {
                               mainAxisSize: MainAxisSize.max,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                ...snapshot.data,
+                                // TODO refactor
+                                if (snapshot.hasData) ...snapshot.data!,
                               ],
                             );
                           }),

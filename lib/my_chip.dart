@@ -4,9 +4,9 @@ import 'package:haxe_io_flutter/item_type.dart';
 import 'grid_bloc.dart';
 
 class MyChip extends StatefulWidget {
-  final ItemType type;
+  final ItemView view;
 
-  MyChip({Key key, @required this.type}) : super(key: key);
+  MyChip({Key? key, required this.view}) : super(key: key);
 
   @override
   _MyChipState createState() => _MyChipState();
@@ -20,21 +20,22 @@ class _MyChipState extends State<MyChip> {
   Widget build(BuildContext context) {
     return FilterChip(
         label: Text(
-          widget.type.typeLabel,
-          style: TextStyle(color: isSelected ? widget.type.color : grey),
+          widget.view.typeLabel,
+          style: TextStyle(color: isSelected ? widget.view.color : grey),
         ),
         showCheckmark: false,
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(3),
-            side: BorderSide(color: isSelected ? widget.type.color : grey)),
-        selectedColor: widget.type.color.withOpacity(0.4),
+          borderRadius: BorderRadius.circular(3),
+          side: BorderSide(color: isSelected ? widget.view.color : grey),
+        ),
+        selectedColor: widget.view.color.withOpacity(0.4),
         backgroundColor: Colors.transparent,
         selected: this.isSelected,
         onSelected: (_) {
-          print("type ${widget.type}");
+          print("type ${widget.view}");
           setState(() {
             isSelected = !isSelected;
-            gridBloc.sortBy(widget.type);
+            gridBloc.sortBy(widget.view.type);
           });
         });
   }

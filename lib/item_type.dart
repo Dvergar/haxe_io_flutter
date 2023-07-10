@@ -1,68 +1,124 @@
 import 'package:flutter/material.dart';
 
-abstract class ItemType {
-  Color color;
-  String typeLabel;
-  String label;
-  String url;
-  String jsonUrl;
-  bool markdown;
-
-  ItemType([this.label, this.url, this.markdown, this.jsonUrl]);
+enum ItemType {
+  weeklyNews,
+  releases,
+  events,
+  videos,
+  developerInterviews,
+  articles,
+  ludumDare,
 }
 
-class WeeklyNews extends ItemType {
-  var typeLabel = "Weekly News";
-  var color = Color.fromARGB(255, 241, 89, 34);
+class ItemModel {
+  final ItemType type;
+  final String label;
+  final String url;
+  final bool markdown;
+  final String? jsonUrl;
 
-  WeeklyNews([String label, String url, bool markdown])
-      : super(label, url, markdown);
+  ItemModel({
+    required this.type,
+    required this.label,
+    required this.url,
+    required this.markdown,
+    this.jsonUrl,
+  });
 }
 
-class Releases extends ItemType {
-  var typeLabel = "Releases";
-  var color = Color.fromARGB(255, 108, 198, 68);
-
-  Releases([String label, String url, bool markdown])
-      : super(label, url, markdown);
+abstract class ItemView {
+  late final ItemType type;
+  late final Color color;
+  late final String typeLabel;
 }
 
-class Events extends ItemType {
-  var typeLabel = "Events";
-  var color = Color.fromARGB(255, 255, 128, 0);
+class WeeklyNews implements ItemView {
+  @override
+  ItemType type = ItemType.weeklyNews;
 
-  Events([String label, String url, bool markdown])
-      : super(label, url, markdown);
+  @override
+  Color color = Color.fromARGB(255, 241, 89, 34);
+
+  @override
+  String typeLabel = "Weekly News";
+
+  WeeklyNews();
 }
 
-class Videos extends ItemType {
-  var typeLabel = "Videos";
-  var color = Color.fromARGB(255, 205, 32, 31);
+class Releases extends ItemView {
+  @override
+  ItemType type = ItemType.releases;
 
-  Videos([String label, String url, bool markdown])
-      : super(label, url, markdown);
+  @override
+  Color color = Color.fromARGB(255, 108, 198, 68);
+
+  @override
+  String typeLabel = "Releases";
+
+  Releases();
 }
 
-class LudumDare extends ItemType {
-  var typeLabel = "LudumDare";
-  var color = Color.fromARGB(255, 119, 68, 204);
+class Events extends ItemView {
+  @override
+  ItemType type = ItemType.events;
 
-  LudumDare([String label, String url, bool markdown, String jsonUrl])
-      : super(label, url, markdown, jsonUrl);
+  @override
+  Color color = Color.fromARGB(255, 255, 128, 0);
+
+  @override
+  String typeLabel = "Events";
+
+  Events();
 }
 
-class DeveloperInterviews extends ItemType {
-  var typeLabel = "Developer Interviews";
-  var color = Color.fromARGB(255, 255, 128, 0);
+class Videos extends ItemView {
+  @override
+  ItemType type = ItemType.videos;
 
-  DeveloperInterviews([String label, String url, bool markdown])
-      : super(label, url, markdown);
+  @override
+  Color color = Color.fromARGB(255, 205, 32, 31);
+
+  @override
+  String typeLabel = "Videos";
+
+  Videos();
 }
 
-class Articles extends ItemType {
-  var typeLabel = "Articles";
-  var color = Color.fromARGB(255, 71, 99, 152);
+class DeveloperInterviews extends ItemView {
+  @override
+  ItemType type = ItemType.developerInterviews;
 
-  Articles([String label, String url, bool markdown])
-      : super(label, url, markdown);
+  @override
+  Color color = Color.fromARGB(255, 255, 128, 0);
+
+  @override
+  String typeLabel = "Developer Interviews";
+
+  DeveloperInterviews();
+}
+
+class Articles extends ItemView {
+  @override
+  ItemType type = ItemType.articles;
+
+  @override
+  Color color = Color.fromARGB(255, 71, 99, 152);
+
+  @override
+  String typeLabel = "Articles";
+
+  Articles();
+}
+
+class LudumDare extends ItemView {
+  @override
+  ItemType type = ItemType.ludumDare;
+
+  @override
+  Color color = Color.fromARGB(255, 119, 68, 204);
+
+  @override
+  String typeLabel = "LudumDare";
+
+  LudumDare();
 }

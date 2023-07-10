@@ -2,12 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:haxe_io_flutter/item_type.dart';
 import 'package:html/dom.dart' as doom;
+import 'package:html/dom.dart';
 import 'package:html/parser.dart';
 import 'package:http/http.dart';
 
 class GridBloc {
-  List<ItemType> items = [];
-  List<Type> filters = [];
+  List<ItemModel> items = [];
+  List<ItemType> filters = [];
   final gridController = StreamController.broadcast();
 
   Stream get stream => gridController.stream;
@@ -19,13 +20,13 @@ class GridBloc {
     });
   }
 
-  Future getDocument(url) async {
+  Future<Document> getDocument(url) async {
     var client = Client();
     Response response = await client.get(Uri.parse(url));
     return parse(utf8.decode(response.bodyBytes));
   }
 
-  Future<List<dynamic>> scrape() async {
+  Future<List<ItemModel>> scrape() async {
     var document = await getDocument("https://haxe.io/");
     List<doom.Element> posts = document.querySelectorAll('main > ul > li > a');
 
@@ -41,9 +42,9 @@ class GridBloc {
 
     return posts.map((post) {
       // URL MANIPULATION
-      var href = post.attributes['href'];
-      var title = post.attributes['title'];
-      ItemType type;
+      var href = post.attributes['href']!;
+      var title = post.attributes['title']!;
+      ItemModel type;
 
       if (href.startsWith('/ld/')) {
         var jsonUrl;
@@ -54,38 +55,84 @@ class GridBloc {
           jsonUrl =
               'https://raw.githubusercontent.com/skial/haxe.io/master/src/data/ld37.json';
 
-        type = LudumDare(title, getMarkDownLink(href), true, jsonUrl);
+        type = ItemModel(
+          label: title,
+          url: getMarkDownLink(href),
+          markdown: true,
+          jsonUrl: jsonUrl,
+          type: ItemType.articles,
+        );
       } else if (href.startsWith('/roundups/')) {
-        type = WeeklyNews(title, getMarkDownLink(href), true);
+        type = ItemModel(
+          label: title,
+          url: getMarkDownLink(href),
+          markdown: true,
+          type: ItemType.weeklyNews,
+        );
       } else if (href.startsWith('/releases/')) {
-        type = Releases(title, getMarkDownLink(href), true);
+        type = ItemModel(
+          label: title,
+          url: getMarkDownLink(href),
+          markdown: true,
+          type: ItemType.releases,
+        );
       } else if (href.startsWith('/wwx/')) // Fragile
       {
         var mdLink = getMarkDownLink(href);
         mdLink = mdLink.replaceAll("-", " ");
-        type = DeveloperInterviews(title, mdLink, true);
+        type = ItemModel(
+          label: title,
+          url: mdLink,
+          markdown: true,
+          type: ItemType.developerInterviews,
+        );
       } else if (href.startsWith('/videos/')) {
-        type = Videos(title, getMarkDownLink(href), true);
+        type = ItemModel(
+          label: title,
+          url: getMarkDownLink(href),
+          markdown: true,
+          type: ItemType.videos,
+        );
       } else if (href.startsWith('/events/')) {
-        type = Events(title, getMarkDownLink(href), true);
-      } else if (post.parent.id == 'link--video') {
-        type = Videos(title, href, false);
-      } else if (post.parent.id == 'event--link') {
-        type = Events(title, href, false);
+        type = ItemModel(
+          label: title,
+          url: getMarkDownLink(href),
+          markdown: true,
+          type: ItemType.events,
+        );
+      } else if (post.parent?.id == 'link--video') {
+        type = ItemModel(
+          label: title,
+          url: href,
+          markdown: false,
+          type: ItemType.videos,
+        );
+      } else if (post.parent?.id == 'event--link') {
+        type = ItemModel(
+          label: title,
+          url: href,
+          markdown: false,
+          type: ItemType.events,
+        );
       } else {
-        type = Articles(title, href, false);
+        type = ItemModel(
+          label: title,
+          url: href,
+          markdown: false,
+          type: ItemType.articles,
+        );
       }
 
       return type;
     }).toList();
   }
 
-  sortBy(ItemType chip) {
+  sortBy(ItemType type) {
     // ADD/REMOVE FILTERS
-    if (!filters.contains(chip.runtimeType)) {
-      filters.add(chip.runtimeType);
+    if (!filters.contains(type)) {
+      filters.add(type);
     } else {
-      filters.remove(chip.runtimeType);
+      filters.remove(type);
     }
 
     // ALL ITEMS
@@ -96,7 +143,7 @@ class GridBloc {
 
     // DO FILTER
     var filteredItems =
-        this.items.where((item) => filters.contains(item.runtimeType)).toList();
+        this.items.where((item) => filters.contains(item.type)).toList();
     gridController.sink.add(filteredItems);
   }
 
