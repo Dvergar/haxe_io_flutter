@@ -53,7 +53,9 @@ class _MyHomePageState extends State<MyHomePage> {
               Text(
                 widget.title,
                 style: GoogleFonts.gentiumBookPlus(
-                    color: const Color.fromARGB(255, 51, 51, 50), fontSize: 30),
+                  color: const Color.fromARGB(255, 51, 51, 50),
+                  fontSize: 30,
+                ),
               ),
             ],
           ),
@@ -93,91 +95,94 @@ class _MyHomePageState extends State<MyHomePage> {
                   if (!snapshot.hasData) return Container();
                   List<ItemModel> articles = snapshot.data;
                   return GridView.count(
-                      controller: _scrollController,
-                      crossAxisCount: 2,
-                      children: articles
-                          .map((article) => GestureDetector(
-                                onTap: () {
-                                  if (article.markdown) {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                Post(article: article)));
-                                  } else {
-                                    FlutterWebBrowser.openWebPage(
-                                      url: article.url,
-                                      customTabsOptions:
-                                          const CustomTabsOptions(
-                                        defaultColorSchemeParams:
-                                            CustomTabsColorSchemeParams(
-                                          toolbarColor: Colors.orangeAccent,
+                    controller: _scrollController,
+                    crossAxisCount: 2,
+                    children: articles
+                        .map((article) => GestureDetector(
+                              onTap: () {
+                                if (article.markdown) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          Post(article: article),
+                                    ),
+                                  );
+                                } else {
+                                  FlutterWebBrowser.openWebPage(
+                                    url: article.url,
+                                    customTabsOptions: const CustomTabsOptions(
+                                      defaultColorSchemeParams:
+                                          CustomTabsColorSchemeParams(
+                                        toolbarColor: Colors.orangeAccent,
+                                      ),
+                                    ),
+                                    // androidToolbarColor:
+                                    //     Colors.orangeAccent
+                                  );
+                                }
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(2.0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: const HSLColor.fromAHSL(
+                                              0.8, 47, 0.36, 0.95)
+                                          .toColor(),
+                                      border: Border(
+                                        bottom: BorderSide(
+                                          color: const HSLColor.fromAHSL(
+                                                  0.3, 0, 0, 0.74)
+                                              .toColor(),
+                                          width: 1.0,
+                                        ),
+                                        right: BorderSide(
+                                          color: const HSLColor.fromAHSL(
+                                                  0.3, 0, 0, 0.74)
+                                              .toColor(),
+                                          width: 1.0,
                                         ),
                                       ),
-                                      // androidToolbarColor:
-                                      //     Colors.orangeAccent
-                                    );
-                                  }
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(2.0),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: const HSLColor.fromAHSL(
-                                                0.8, 47, 0.36, 0.95)
-                                            .toColor(),
-                                        border: Border(
-                                          bottom: BorderSide(
-                                            color: const HSLColor.fromAHSL(
-                                                    0.3, 0, 0, 0.74)
-                                                .toColor(),
-                                            width: 1.0,
-                                          ),
-                                          right: BorderSide(
-                                            color: const HSLColor.fromAHSL(
-                                                    0.3, 0, 0, 0.74)
-                                                .toColor(),
-                                            width: 1.0,
-                                          ),
-                                        ),
-                                      ),
-                                      child: Row(
-                                        children: <Widget>[
-                                          Container(
-                                              color: Articles()
-                                                  .color
-                                                  .withOpacity(0.8),
-                                              width: 4),
-                                          Container(
-                                              color: Articles()
-                                                  .color
-                                                  .withOpacity(0.4),
-                                              width: 4),
-                                          Expanded(
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(8),
-                                              child: Text(
-                                                article.label,
-                                                maxLines: 4,
-                                                overflow: TextOverflow.ellipsis,
-                                                textAlign: TextAlign.center,
-                                                style: GoogleFonts.openSans(
-                                                    fontSize: 25,
-                                                    fontWeight: FontWeight.w700,
-                                                    color: const Color.fromARGB(
-                                                        255, 51, 51, 50)),
+                                    ),
+                                    child: Row(
+                                      children: <Widget>[
+                                        Container(
+                                            color: Articles()
+                                                .color
+                                                .withOpacity(0.8),
+                                            width: 4),
+                                        Container(
+                                            color: Articles()
+                                                .color
+                                                .withOpacity(0.4),
+                                            width: 4),
+                                        Expanded(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8),
+                                            child: Text(
+                                              article.label,
+                                              maxLines: 4,
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.center,
+                                              style: GoogleFonts.openSans(
+                                                fontSize: 25,
+                                                fontWeight: FontWeight.w700,
+                                                color: const Color.fromARGB(
+                                                    255, 51, 51, 50),
                                               ),
                                             ),
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
-                              ))
-                          .toList());
+                              ),
+                            ))
+                        .toList(),
+                  );
                 }),
           ),
         ],

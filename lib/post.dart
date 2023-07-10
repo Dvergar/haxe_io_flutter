@@ -738,18 +738,23 @@ class _PostState extends State<Post> {
 
       widgets.add(Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
-        child: Text(frameworkName,
-            style: const TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: Color(0xff333332))),
+        child: Text(
+          frameworkName,
+          style: const TextStyle(
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+            color: Color(0xff333332),
+          ),
+        ),
       ));
 
-      var games = entries.where((entry) {
-        var frameworks = entry['frameworks'];
+      var games = entries.where(
+        (entry) {
+          var frameworks = entry['frameworks'];
 
-        return frameworks.contains(frameworkName);
-      }).toList();
+          return frameworks.contains(frameworkName);
+        },
+      ).toList();
 
       for (var game in games) {
         if (frameworkName == 'Haxe' && game['frameworks'].length > 1) {
@@ -776,36 +781,40 @@ class _PostState extends State<Post> {
                           style: TextStyle(
                               fontSize: 10, color: Color(0xff333332))),
                       TextSpan(
-                          text: game['name'],
-                          style: const TextStyle(
-                              color: aColor, backgroundColor: aBackgroundColor),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () => FlutterWebBrowser.openWebPage(
-                                url:
-                                    "http://ludumdare.com/compo/ludum-dare-37/${game['url']}",
-                                customTabsOptions: const CustomTabsOptions(
-                                    defaultColorSchemeParams:
-                                        CustomTabsColorSchemeParams(
+                        text: game['name'],
+                        style: const TextStyle(
+                            color: aColor, backgroundColor: aBackgroundColor),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () => FlutterWebBrowser.openWebPage(
+                              url:
+                                  "http://ludumdare.com/compo/ludum-dare-37/${game['url']}",
+                              customTabsOptions: const CustomTabsOptions(
+                                defaultColorSchemeParams:
+                                    CustomTabsColorSchemeParams(
                                   toolbarColor: Colors.orangeAccent,
-                                ))
-                                // androidToolbarColor: Colors.orangeAccent
-                                )),
+                                ),
+                              )
+                              // androidToolbarColor: Colors.orangeAccent
+                              ),
+                      ),
                       const TextSpan(text: ' by '),
                       TextSpan(
-                          text: game['author']['name'],
-                          style: const TextStyle(
-                              color: aColor, backgroundColor: aBackgroundColor),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () => FlutterWebBrowser.openWebPage(
-                                url:
-                                    "http://ludumdare.com/compo${game['author']['url']}",
-                                customTabsOptions: const CustomTabsOptions(
-                                    defaultColorSchemeParams:
-                                        CustomTabsColorSchemeParams(
+                        text: game['author']['name'],
+                        style: const TextStyle(
+                            color: aColor, backgroundColor: aBackgroundColor),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () => FlutterWebBrowser.openWebPage(
+                              url:
+                                  "http://ludumdare.com/compo${game['author']['url']}",
+                              customTabsOptions: const CustomTabsOptions(
+                                defaultColorSchemeParams:
+                                    CustomTabsColorSchemeParams(
                                   toolbarColor: Colors.orangeAccent,
-                                ))
-                                // androidToolbarColor: Colors.orangeAccent
-                                )),
+                                ),
+                              )
+                              // androidToolbarColor: Colors.orangeAccent
+                              ),
+                      ),
                     ],
                   ),
                 ),
@@ -813,18 +822,19 @@ class _PostState extends State<Post> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 6),
                 child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-                    decoration: BoxDecoration(
-                        color: typeColor.withOpacity(0.3),
-                        borderRadius: BorderRadius.circular(2.0)),
-                    child: Text(
-                      gameType,
-                      style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                          color: typeColor),
-                    )),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                  decoration: BoxDecoration(
+                      color: typeColor.withOpacity(0.3),
+                      borderRadius: BorderRadius.circular(2.0)),
+                  child: Text(
+                    gameType,
+                    style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                        color: typeColor),
+                  ),
+                ),
               )
             ],
           ),
@@ -843,15 +853,19 @@ class _PostState extends State<Post> {
     markdown = markdown.replaceAll('/img/',
         'https://raw.githubusercontent.com/skial/haxe.io/master/src/img/');
     // TRANSFORM IFRAMES TO LINKS
-    markdown =
-        markdown.replaceAllMapped(RegExp(r'!\[iframe\]\((.*)\)'), (match) {
-      return '${match.group(1)}';
-    });
+    markdown = markdown.replaceAllMapped(
+      RegExp(r'!\[iframe\]\((.*)\)'),
+      (match) {
+        return '${match.group(1)}';
+      },
+    );
     return markdown;
   }
 
   Future<List<Widget>> getJson(url) async {
-    return parseJson(await getDocument(url));
+    return parseJson(
+      await getDocument(url),
+    );
   }
 
   @override
@@ -862,7 +876,9 @@ class _PostState extends State<Post> {
           title: Text(
             Articles().typeLabel,
             style: GoogleFonts.gentiumBookPlus(
-                color: const Color.fromARGB(255, 51, 51, 50), fontSize: 30),
+              color: const Color.fromARGB(255, 51, 51, 50),
+              fontSize: 30,
+            ),
           ),
           elevation: 0.0,
           backgroundColor: Colors.transparent,
@@ -886,24 +902,29 @@ class _PostState extends State<Post> {
                       shrinkWrap: true,
                       data: snapshot.data,
                       styleSheet: MarkdownStyleSheet(
-                          p: const TextStyle(
-                              fontSize: pFontSize,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w300),
-                          a: const TextStyle(
-                              color: aColor,
-                              backgroundColor: aBackgroundColor)),
+                        p: const TextStyle(
+                          fontSize: pFontSize,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w300,
+                        ),
+                        a: const TextStyle(
+                          color: aColor,
+                          backgroundColor: aBackgroundColor,
+                        ),
+                      ),
                       onTapLink: (text, link, title) {
                         print("link $link");
                         FlutterWebBrowser.openWebPage(
-                            // TODO: double-check null
-                            url: link!,
-                            // androidToolbarColor: Colors.orangeAccent
-                            customTabsOptions: const CustomTabsOptions(
-                                defaultColorSchemeParams:
-                                    CustomTabsColorSchemeParams(
+                          // TODO: double-check null
+                          url: link!,
+                          // androidToolbarColor: Colors.orangeAccent
+                          customTabsOptions: const CustomTabsOptions(
+                            defaultColorSchemeParams:
+                                CustomTabsColorSchemeParams(
                               toolbarColor: Colors.orangeAccent,
-                            )));
+                            ),
+                          ),
+                        );
                       },
                     ),
                   );
@@ -914,23 +935,24 @@ class _PostState extends State<Post> {
                       padding: const EdgeInsets.symmetric(horizontal: 18),
                       alignment: Alignment.centerLeft,
                       child: FutureBuilder<List<Widget>>(
-                          future: getJson(widget.article.jsonUrl),
-                          builder: (context, snapshot) {
-                            if (!snapshot.hasData) {
-                              return const SpinKitChasingDots(
-                                color: Colors.orangeAccent,
-                                size: 100.0,
-                              );
-                            }
-                            return Column(
-                              mainAxisSize: MainAxisSize.max,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                // TODO refactor
-                                if (snapshot.hasData) ...snapshot.data!,
-                              ],
+                        future: getJson(widget.article.jsonUrl),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return const SpinKitChasingDots(
+                              color: Colors.orangeAccent,
+                              size: 100.0,
                             );
-                          }),
+                          }
+                          return Column(
+                            mainAxisSize: MainAxisSize.max,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              // TODO refactor
+                              if (snapshot.hasData) ...snapshot.data!,
+                            ],
+                          );
+                        },
+                      ),
                     )
                   : Container()
             ],

@@ -14,10 +14,12 @@ class GridBloc {
   Stream get stream => gridController.stream;
 
   GridBloc() {
-    scrape().then((items) {
-      this.items = items;
-      gridController.sink.add(items);
-    });
+    scrape().then(
+      (items) {
+        this.items = items;
+        gridController.sink.add(items);
+      },
+    );
   }
 
   Future<Document> getDocument(url) async {
