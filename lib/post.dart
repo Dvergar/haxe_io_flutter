@@ -709,10 +709,10 @@ var ldJson = '''
 class Post extends StatefulWidget {
   final ItemModel article;
 
-  Post({Key? key, required this.article}) : super(key: key);
+  const Post({Key? key, required this.article}) : super(key: key);
 
   @override
-  _PostState createState() => _PostState();
+  State<Post> createState() => _PostState();
 }
 
 class _PostState extends State<Post> {
@@ -739,7 +739,7 @@ class _PostState extends State<Post> {
       widgets.add(Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: Text(frameworkName,
-            style: TextStyle(
+            style: const TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
                 color: Color(0xff333332))),
@@ -752,8 +752,9 @@ class _PostState extends State<Post> {
       }).toList();
 
       for (var game in games) {
-        if (frameworkName == 'Haxe' && game['frameworks'].length > 1)
+        if (frameworkName == 'Haxe' && game['frameworks'].length > 1) {
           continue; // FRAGILE
+        }
 
         var gameType =
             '${game['type'][0].toUpperCase()}${game['type'].substring(1)}';
@@ -767,35 +768,42 @@ class _PostState extends State<Post> {
               Flexible(
                 child: RichText(
                   text: TextSpan(
-                    style: TextStyle(fontSize: pFontSize, color: Colors.black),
+                    style: const TextStyle(
+                        fontSize: pFontSize, color: Colors.black),
                     children: <TextSpan>[
-                      TextSpan(
+                      const TextSpan(
                           text: "    ⬤    ",
                           style: TextStyle(
                               fontSize: 10, color: Color(0xff333332))),
                       TextSpan(
                           text: game['name'],
-                          style: TextStyle(
+                          style: const TextStyle(
                               color: aColor, backgroundColor: aBackgroundColor),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () => FlutterWebBrowser.openWebPage(
                                 url:
                                     "http://ludumdare.com/compo/ludum-dare-37/${game['url']}",
-                                customTabsOptions: CustomTabsOptions(
-                                    toolbarColor: Colors.orangeAccent)
+                                customTabsOptions: const CustomTabsOptions(
+                                    defaultColorSchemeParams:
+                                        CustomTabsColorSchemeParams(
+                                  toolbarColor: Colors.orangeAccent,
+                                ))
                                 // androidToolbarColor: Colors.orangeAccent
                                 )),
-                      TextSpan(text: ' by '),
+                      const TextSpan(text: ' by '),
                       TextSpan(
                           text: game['author']['name'],
-                          style: TextStyle(
+                          style: const TextStyle(
                               color: aColor, backgroundColor: aBackgroundColor),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () => FlutterWebBrowser.openWebPage(
                                 url:
                                     "http://ludumdare.com/compo${game['author']['url']}",
-                                customTabsOptions: CustomTabsOptions(
-                                    toolbarColor: Colors.orangeAccent)
+                                customTabsOptions: const CustomTabsOptions(
+                                    defaultColorSchemeParams:
+                                        CustomTabsColorSchemeParams(
+                                  toolbarColor: Colors.orangeAccent,
+                                ))
                                 // androidToolbarColor: Colors.orangeAccent
                                 )),
                     ],
@@ -805,7 +813,8 @@ class _PostState extends State<Post> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 6),
                 child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
                     decoration: BoxDecoration(
                         color: typeColor.withOpacity(0.3),
                         borderRadius: BorderRadius.circular(2.0)),
@@ -853,7 +862,7 @@ class _PostState extends State<Post> {
           title: Text(
             Articles().typeLabel,
             style: GoogleFonts.gentiumBookPlus(
-                color: Color.fromARGB(255, 51, 51, 50), fontSize: 30),
+                color: const Color.fromARGB(255, 51, 51, 50), fontSize: 30),
           ),
           elevation: 0.0,
           backgroundColor: Colors.transparent,
@@ -864,11 +873,12 @@ class _PostState extends State<Post> {
               FutureBuilder(
                 future: getMarkdown(widget.article.url),
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  if (!snapshot.hasData)
-                    return SpinKitChasingDots(
+                  if (!snapshot.hasData) {
+                    return const SpinKitChasingDots(
                       color: Colors.orangeAccent,
                       size: 100.0,
                     );
+                  }
 
                   return Padding(
                     padding: const EdgeInsets.all(16.0),
@@ -876,11 +886,11 @@ class _PostState extends State<Post> {
                       shrinkWrap: true,
                       data: snapshot.data,
                       styleSheet: MarkdownStyleSheet(
-                          p: TextStyle(
+                          p: const TextStyle(
                               fontSize: pFontSize,
                               color: Colors.black,
                               fontWeight: FontWeight.w300),
-                          a: TextStyle(
+                          a: const TextStyle(
                               color: aColor,
                               backgroundColor: aBackgroundColor)),
                       onTapLink: (text, link, title) {
@@ -889,8 +899,11 @@ class _PostState extends State<Post> {
                             // TODO: double-check null
                             url: link!,
                             // androidToolbarColor: Colors.orangeAccent
-                            customTabsOptions: CustomTabsOptions(
-                                toolbarColor: Colors.orangeAccent));
+                            customTabsOptions: const CustomTabsOptions(
+                                defaultColorSchemeParams:
+                                    CustomTabsColorSchemeParams(
+                              toolbarColor: Colors.orangeAccent,
+                            )));
                       },
                     ),
                   );
@@ -898,16 +911,17 @@ class _PostState extends State<Post> {
               ),
               widget.article.jsonUrl != null
                   ? Container(
-                      padding: EdgeInsets.symmetric(horizontal: 18),
+                      padding: const EdgeInsets.symmetric(horizontal: 18),
                       alignment: Alignment.centerLeft,
                       child: FutureBuilder<List<Widget>>(
                           future: getJson(widget.article.jsonUrl),
                           builder: (context, snapshot) {
-                            if (!snapshot.hasData)
-                              return SpinKitChasingDots(
+                            if (!snapshot.hasData) {
+                              return const SpinKitChasingDots(
                                 color: Colors.orangeAccent,
                                 size: 100.0,
                               );
+                            }
                             return Column(
                               mainAxisSize: MainAxisSize.max,
                               crossAxisAlignment: CrossAxisAlignment.start,

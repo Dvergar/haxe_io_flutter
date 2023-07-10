@@ -35,6 +35,7 @@ class GridBloc {
       return 'https://raw.githubusercontent.com/skial/haxe.io/master/src/$hrefClean.md';
     }
 
+    // ignore: unused_element
     getJsonLink(String href) {
       var hrefClean = href.substring(0, href.length - 1);
       return 'https://raw.githubusercontent.com/skial/haxe.io/master/src/data$hrefClean.json';
@@ -47,13 +48,15 @@ class GridBloc {
       ItemModel type;
 
       if (href.startsWith('/ld/')) {
-        var jsonUrl;
-        if (href == '/ld/36/')
+        String? jsonUrl;
+        if (href == '/ld/36/') {
           jsonUrl =
               'https://raw.githubusercontent.com/skial/haxe.io/master/src/data/ld36.json';
-        if (href == '/ld/37/')
+        }
+        if (href == '/ld/37/') {
           jsonUrl =
               'https://raw.githubusercontent.com/skial/haxe.io/master/src/data/ld37.json';
+        }
 
         type = ItemModel(
           label: title,
@@ -136,14 +139,14 @@ class GridBloc {
     }
 
     // ALL ITEMS
-    if (filters.length == 0) {
-      gridController.sink.add(this.items);
+    if (filters.isEmpty) {
+      gridController.sink.add(items);
       return;
     }
 
     // DO FILTER
     var filteredItems =
-        this.items.where((item) => filters.contains(item.type)).toList();
+        items.where((item) => filters.contains(item.type)).toList();
     gridController.sink.add(filteredItems);
   }
 

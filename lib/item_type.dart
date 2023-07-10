@@ -37,7 +37,7 @@ class WeeklyNews implements ItemView {
   ItemType type = ItemType.weeklyNews;
 
   @override
-  Color color = Color.fromARGB(255, 241, 89, 34);
+  Color color = const Color.fromARGB(255, 241, 89, 34);
 
   @override
   String typeLabel = "Weekly News";
@@ -50,7 +50,7 @@ class Releases extends ItemView {
   ItemType type = ItemType.releases;
 
   @override
-  Color color = Color.fromARGB(255, 108, 198, 68);
+  Color color = const Color.fromARGB(255, 108, 198, 68);
 
   @override
   String typeLabel = "Releases";
@@ -63,7 +63,7 @@ class Events extends ItemView {
   ItemType type = ItemType.events;
 
   @override
-  Color color = Color.fromARGB(255, 255, 128, 0);
+  Color color = const Color.fromARGB(255, 255, 128, 0);
 
   @override
   String typeLabel = "Events";
@@ -76,7 +76,7 @@ class Videos extends ItemView {
   ItemType type = ItemType.videos;
 
   @override
-  Color color = Color.fromARGB(255, 205, 32, 31);
+  Color color = const Color.fromARGB(255, 205, 32, 31);
 
   @override
   String typeLabel = "Videos";
@@ -89,7 +89,7 @@ class DeveloperInterviews extends ItemView {
   ItemType type = ItemType.developerInterviews;
 
   @override
-  Color color = Color.fromARGB(255, 255, 128, 0);
+  Color color = const Color.fromARGB(255, 255, 128, 0);
 
   @override
   String typeLabel = "Developer Interviews";
@@ -102,7 +102,7 @@ class Articles extends ItemView {
   ItemType type = ItemType.articles;
 
   @override
-  Color color = Color.fromARGB(255, 71, 99, 152);
+  Color color = const Color.fromARGB(255, 71, 99, 152);
 
   @override
   String typeLabel = "Articles";
@@ -115,7 +115,7 @@ class LudumDare extends ItemView {
   ItemType type = ItemType.ludumDare;
 
   @override
-  Color color = Color.fromARGB(255, 119, 68, 204);
+  Color color = const Color.fromARGB(255, 119, 68, 204);
 
   @override
   String typeLabel = "LudumDare";
