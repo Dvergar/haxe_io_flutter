@@ -11,6 +11,7 @@ import 'package:flutter/gestures.dart';
 import 'item_type.dart';
 import 'dart:convert';
 
+// TODO move to mock
 var ldJson = '''
 {
   "ld": 37,
@@ -706,6 +707,81 @@ var ldJson = '''
 }
 ''';
 
+typedef JsonObject = Map<String, dynamic>;
+
+class LudumModel {
+  final List<String> frameworks;
+  final List<LudumEntry> entries;
+
+  LudumModel({
+    required this.frameworks,
+    required this.entries,
+  });
+
+  factory LudumModel.fromJson(JsonObject json) => LudumModel(
+        frameworks: (json['frameworks'] as List)
+            .map((itemObject) => itemObject['framework'] as String)
+            .toList(),
+        entries: (json['entries'] as List)
+            .map(
+              (jsonEntry) => LudumEntry.fromJson(jsonEntry),
+            )
+            .toList(),
+      );
+}
+
+class LudumEntry {
+  final String authorName;
+  final List<String> frameworks;
+
+  LudumEntry({
+    required this.authorName,
+    required this.frameworks,
+  });
+
+  factory LudumEntry.fromJson(Map<String, dynamic> json) => LudumEntry(
+        authorName: json['author']['name'],
+        frameworks:
+            (json['frameworks'] as List).map((e) => e as String).toList(),
+      );
+}
+
+Future<String> getDocument(url) async {
+  var client = Client();
+  Response response = await client.get(Uri.parse(url));
+  var parsed = parse(response.body);
+
+  // TODO handle null
+  return parsed.body!.text;
+}
+
+typedef FrameworkGames = Map<String, List<LudumEntry>>;
+
+FrameworkGames getFrameworkGames(String data) {
+  print("DATA $data");
+
+  JsonObject decodedJson = json.decode(data);
+  final ludumModel = LudumModel.fromJson(decodedJson);
+
+  final frameworkGames = <String, List<LudumEntry>>{};
+
+  for (var entry in ludumModel.entries) {
+    for (var entryFramework in entry.frameworks) {
+      if (entryFramework == 'Haxe' && entry.frameworks.length > 1) {
+        continue; // FRAGILE
+      }
+
+      if (!frameworkGames.containsKey(entryFramework)) {
+        frameworkGames[entryFramework] = [];
+      }
+
+      frameworkGames[entryFramework]!.add(entry);
+    }
+  }
+
+  return frameworkGames;
+}
+
 class Post extends StatefulWidget {
   final ItemModel article;
 
@@ -777,9 +853,12 @@ class _PostState extends State<Post> {
                         fontSize: pFontSize, color: Colors.black),
                     children: <TextSpan>[
                       const TextSpan(
-                          text: "    ⬤    ",
-                          style: TextStyle(
-                              fontSize: 10, color: Color(0xff333332))),
+                        text: "    ⬤    ",
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: Color(0xff333332),
+                        ),
+                      ),
                       TextSpan(
                         text: game['name'],
                         style: const TextStyle(
@@ -825,14 +904,16 @@ class _PostState extends State<Post> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
                   decoration: BoxDecoration(
-                      color: typeColor.withOpacity(0.3),
-                      borderRadius: BorderRadius.circular(2.0)),
+                    color: typeColor.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(2.0),
+                  ),
                   child: Text(
                     gameType,
                     style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,
-                        color: typeColor),
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      color: typeColor,
+                    ),
                   ),
                 ),
               )
@@ -847,23 +928,33 @@ class _PostState extends State<Post> {
 
   Future<String> getMarkdown(url) async {
     var markdown = await getDocument(url);
+    // var markdown = ldJson;
     // REPLACE WEIRD TOP CHARACTERS
-    markdown = markdown.replaceAll('[“”]: a ""', ''); // What is this ?
+    markdown = markdown.replaceAll(
+      '[“”]: a ""',
+      '',
+    ); // What is this ?
     // MUTATE RELATIVE TO ABSOLUTE LINKS
-    markdown = markdown.replaceAll('/img/',
-        'https://raw.githubusercontent.com/skial/haxe.io/master/src/img/');
+    markdown = markdown.replaceAll(
+      '/img/',
+      'https://raw.githubusercontent.com/skial/haxe.io/master/src/img/',
+    );
     // TRANSFORM IFRAMES TO LINKS
     markdown = markdown.replaceAllMapped(
       RegExp(r'!\[iframe\]\((.*)\)'),
-      (match) {
-        return '${match.group(1)}';
-      },
+      (match) => '${match.group(1)}',
     );
     return markdown;
   }
 
   Future<List<Widget>> getJson(url) async {
     return parseJson(
+      await getDocument(url),
+    );
+  }
+
+  Future<FrameworkGames> getJson2(url) async {
+    return getFrameworkGames(
       await getDocument(url),
     );
   }
@@ -934,23 +1025,40 @@ class _PostState extends State<Post> {
                   ? Container(
                       padding: const EdgeInsets.symmetric(horizontal: 18),
                       alignment: Alignment.centerLeft,
-                      child: FutureBuilder<List<Widget>>(
-                        future: getJson(widget.article.jsonUrl),
+                      child: FutureBuilder<FrameworkGames>(
+                        // future: getJson(widget.article.jsonUrl),
+                        future: getJson2(widget.article.jsonUrl),
                         builder: (context, snapshot) {
                           if (!snapshot.hasData) {
                             return const SpinKitChasingDots(
                               color: Colors.orangeAccent,
                               size: 100.0,
                             );
+                          } else {
+                            print(snapshot.data);
+
+                            
+
+                            final frameworkGames = snapshot.data!.entries;
+
+                            return Column(
+                              mainAxisSize: MainAxisSize.max,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                // TODO refactor
+                                // if (snapshot.hasData) ...snapshot.data!,
+
+                                for (final frameworkEntries in frameworkGames)
+                                ... [
+
+                                  FrameWorkTitle(titleName: frameworkEntries.key),
+                                  for(final game in frameworkEntries.value)
+                                  
+                                ]
+
+                              ],
+                            );
                           }
-                          return Column(
-                            mainAxisSize: MainAxisSize.max,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              // TODO refactor
-                              if (snapshot.hasData) ...snapshot.data!,
-                            ],
-                          );
                         },
                       ),
                     )
@@ -958,5 +1066,27 @@ class _PostState extends State<Post> {
             ],
           ),
         ));
+  }
+}
+
+class FrameWorkTitle extends StatelessWidget {
+  final String titleName;
+
+  const FrameWorkTitle({super.key, required this.titleName});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8.0),
+                                    child: Text(
+                                      titleName,
+                                      style: const TextStyle(
+                                        fontSize: 28,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xff333332),
+                                      ),
+                                    ),
+                                  );
   }
 }

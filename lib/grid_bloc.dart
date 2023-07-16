@@ -37,18 +37,13 @@ class GridBloc {
       return 'https://raw.githubusercontent.com/skial/haxe.io/master/src/$hrefClean.md';
     }
 
-    // ignore: unused_element
-    getJsonLink(String href) {
-      var hrefClean = href.substring(0, href.length - 1);
-      return 'https://raw.githubusercontent.com/skial/haxe.io/master/src/data$hrefClean.json';
-    }
-
     return posts.map((post) {
       // URL MANIPULATION
       var href = post.attributes['href']!;
       var title = post.attributes['title']!;
       ItemModel type;
 
+      // TODO make it dynamic
       if (href.startsWith('/ld/')) {
         String? jsonUrl;
         if (href == '/ld/36/') {
@@ -65,7 +60,7 @@ class GridBloc {
           url: getMarkDownLink(href),
           markdown: true,
           jsonUrl: jsonUrl,
-          type: ItemType.articles,
+          type: ItemType.ludumDare,
         );
       } else if (href.startsWith('/roundups/')) {
         type = ItemModel(
