@@ -137,12 +137,12 @@ class GridBloc {
     }).toList();
   }
 
-  sortBy(ItemType chip) {
+  sortBy(ItemType itemType) {
     // ADD/REMOVE FILTERS
-    if (!filters.contains(chip.runtimeType)) {
-      filters.add(chip.runtimeType);
+    if (!filters.contains(itemType.runtimeType)) {
+      filters.add(itemType.runtimeType);
     } else {
-      filters.remove(chip.runtimeType);
+      filters.remove(itemType.runtimeType);
     }
 
     // ALL ITEMS
@@ -152,8 +152,11 @@ class GridBloc {
     }
 
     // DO FILTER
-    var filteredItems =
-        this.items.where((item) => filters.contains(item.runtimeType)).toList();
+    var filteredItems = this
+        .items
+        .where((item) => filters.contains(item.type.runtimeType))
+        .toList();
+
     gridController.sink.add(filteredItems);
   }
 
