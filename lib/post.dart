@@ -96,7 +96,10 @@ class _PostState extends State<Post> {
                               url:
                                   "http://ludumdare.com/compo/ludum-dare-37/${game['url']}",
                               customTabsOptions: const CustomTabsOptions(
-                                toolbarColor: Colors.orangeAccent,
+                                defaultColorSchemeParams:
+                                    CustomTabsColorSchemeParams(
+                                  toolbarColor: Colors.orangeAccent,
+                                ),
                               )
                               // androidToolbarColor: Colors.orangeAccent
 
@@ -114,7 +117,10 @@ class _PostState extends State<Post> {
                                 url:
                                     "http://ludumdare.com/compo${game['author']['url']}",
                                 customTabsOptions: const CustomTabsOptions(
-                                  toolbarColor: Colors.orangeAccent,
+                                  defaultColorSchemeParams:
+                                      CustomTabsColorSchemeParams(
+                                    toolbarColor: Colors.orangeAccent,
+                                  ),
                                 )
                                 // androidToolbarColor: Colors.orangeAccent
                                 ,
@@ -217,9 +223,10 @@ class _PostState extends State<Post> {
                       // print("link $link");
                       FlutterWebBrowser.openWebPage(
                         url: link!,
-                        // androidToolbarColor: Colors.orangeAccent
                         customTabsOptions: const CustomTabsOptions(
-                          toolbarColor: Colors.orangeAccent,
+                          defaultColorSchemeParams: CustomTabsColorSchemeParams(
+                            toolbarColor: Colors.orangeAccent,
+                          ),
                         ),
                       );
                     },

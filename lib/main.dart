@@ -111,7 +111,10 @@ class _MyHomePageState extends State<MyHomePage> {
                               FlutterWebBrowser.openWebPage(
                                 url: article.url,
                                 customTabsOptions: const CustomTabsOptions(
-                                  toolbarColor: Colors.orangeAccent,
+                                  defaultColorSchemeParams:
+                                      CustomTabsColorSchemeParams(
+                                    toolbarColor: Colors.orangeAccent,
+                                  ),
                                 ),
                                 // androidToolbarColor:
                                 //     Colors.orangeAccent
