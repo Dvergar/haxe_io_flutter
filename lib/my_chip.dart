@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:haxe_io_flutter/item_type.dart';
 
 import 'grid_bloc.dart';
+import 'item_type.dart';
 
 class MyChip extends StatefulWidget {
   final ItemType type;
 
-  MyChip({Key key, @required this.type}) : super(key: key);
+  MyChip({required this.type});
 
   @override
   _MyChipState createState() => _MyChipState();

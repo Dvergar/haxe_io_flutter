@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:haxe_io_flutter/item_type.dart';
+import 'package:haxe_io_flutter/item.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_web_browser/flutter_web_browser.dart';
 
+import 'item_type.dart';
 import 'my_chip.dart';
 import 'post.dart';
 import 'grid_bloc.dart';
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({required this.title});
 
   final String title;
 
@@ -49,7 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
               SizedBox(width: 10),
               Text(
                 widget.title,
-                style: GoogleFonts.gentiumBookBasic(
+                style: GoogleFonts.gentiumBookPlus(
                     color: Color.fromARGB(255, 51, 51, 50), fontSize: 30),
               ),
             ],
@@ -88,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 stream: gridBloc.stream,
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                   if (!snapshot.hasData) return Container();
-                  List<ItemType> articles = snapshot.data;
+                  List<Item> articles = snapshot.data;
                   return GridView.count(
                       controller: _scrollController,
                       crossAxisCount: 2,
@@ -138,11 +139,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                       child: Row(
                                         children: <Widget>[
                                           Container(
-                                              color: article.color
+                                              color: article.type.color
                                                   .withOpacity(0.8),
                                               width: 4),
                                           Container(
-                                              color: article.color
+                                              color: article.type.color
                                                   .withOpacity(0.4),
                                               width: 4),
                                           Expanded(
@@ -181,7 +182,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onTap;
   final AppBar appBar;
 
-  const CustomAppBar({Key key, this.onTap, this.appBar}) : super(key: key);
+  const CustomAppBar({
+    super.key,
+    required this.onTap,
+    required this.appBar,
+  });
 
   @override
   Widget build(BuildContext context) {

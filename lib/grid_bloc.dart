@@ -1,14 +1,16 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:haxe_io_flutter/item_type.dart';
+import 'package:haxe_io_flutter/item.dart';
 import 'package:html/dom.dart' as doom;
 import 'package:html/parser.dart';
 import 'package:http/http.dart';
 
+import 'item_type.dart';
+
 class GridBloc {
-  List<ItemType> items = [];
+  List<Item> items = [];
   List<Type> filters = [];
-  final gridController = StreamController.broadcast();
+  final gridController = StreamController<List<Item>>.broadcast();
 
   Stream get stream => gridController.stream;
 
@@ -25,7 +27,7 @@ class GridBloc {
     return parse(utf8.decode(response.bodyBytes));
   }
 
-  Future<List<dynamic>> scrape() async {
+  Future<List<Item>> scrape() async {
     var document = await getDocument("https://haxe.io/");
     List<doom.Element> posts = document.querySelectorAll('main > ul > li > a');
 
@@ -41,9 +43,9 @@ class GridBloc {
 
     return posts.map((post) {
       // URL MANIPULATION
-      var href = post.attributes['href'];
-      var title = post.attributes['title'];
-      ItemType type;
+      var href = post.attributes['href']!;
+      var title = post.attributes['title']!;
+      Item type;
 
       if (href.startsWith('/ld/')) {
         var jsonUrl;
@@ -54,26 +56,81 @@ class GridBloc {
           jsonUrl =
               'https://raw.githubusercontent.com/skial/haxe.io/master/src/data/ld37.json';
 
-        type = LudumDare(title, getMarkDownLink(href), true, jsonUrl);
+        type = Item(
+          type: LudumDare(),
+          label: title,
+          url: getMarkDownLink(href),
+          markdown: true,
+          jsonUrl: jsonUrl,
+        );
       } else if (href.startsWith('/roundups/')) {
-        type = WeeklyNews(title, getMarkDownLink(href), true);
+        type = Item(
+          type: WeeklyNews(),
+          label: title,
+          url: getMarkDownLink(href),
+          markdown: true,
+          jsonUrl: null,
+        );
       } else if (href.startsWith('/releases/')) {
-        type = Releases(title, getMarkDownLink(href), true);
+        type = Item(
+          type: Releases(),
+          label: title,
+          url: getMarkDownLink(href),
+          markdown: true,
+          // TODO null by default?
+          jsonUrl: null,
+        );
       } else if (href.startsWith('/wwx/')) // Fragile
       {
         var mdLink = getMarkDownLink(href);
         mdLink = mdLink.replaceAll("-", " ");
-        type = DeveloperInterviews(title, mdLink, true);
+        type = Item(
+          type: DeveloperInterviews(),
+          label: title,
+          url: mdLink,
+          markdown: true,
+          jsonUrl: null,
+        );
       } else if (href.startsWith('/videos/')) {
-        type = Videos(title, getMarkDownLink(href), true);
+        type = Item(
+          type: Videos(),
+          label: title,
+          url: getMarkDownLink(href),
+          markdown: true,
+          jsonUrl: null,
+        );
       } else if (href.startsWith('/events/')) {
-        type = Events(title, getMarkDownLink(href), true);
-      } else if (post.parent.id == 'link--video') {
-        type = Videos(title, href, false);
-      } else if (post.parent.id == 'event--link') {
-        type = Events(title, href, false);
+        type = Item(
+          type: Events(),
+          label: title,
+          url: getMarkDownLink(href),
+          markdown: true,
+          jsonUrl: null,
+        );
+      } else if (post.parent?.id == 'link--video') {
+        type = Item(
+          type: Videos(),
+          label: title,
+          url: href,
+          markdown: false,
+          jsonUrl: null,
+        );
+      } else if (post.parent?.id == 'event--link') {
+        type = Item(
+          type: Events(),
+          label: title,
+          url: href,
+          markdown: false,
+          jsonUrl: null,
+        );
       } else {
-        type = Articles(title, href, false);
+        type = Item(
+          type: Articles(),
+          label: title,
+          url: href,
+          markdown: false,
+          jsonUrl: null,
+        );
       }
 
       return type;
