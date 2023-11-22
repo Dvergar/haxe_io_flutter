@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:haxe_io_flutter/item.dart';
 
-import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_web_browser/flutter_web_browser.dart';
+import 'package:haxe_io_flutter/widgets/articles.dart';
+import 'package:haxe_io_flutter/widgets/header.dart';
 
 import 'item_type.dart';
 import 'widgets/my_chip.dart';
-import 'widgets/post.dart';
-import 'grid_bloc.dart';
 
 void main() => runApp(const MyApp());
 
@@ -23,15 +20,13 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.grey,
         scaffoldBackgroundColor: const Color(0xfffffdf9),
       ),
-      home: const MyHomePage(title: 'haxe.io'),
+      home: const MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -46,20 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: CustomAppBar(
         appBar: AppBar(
           centerTitle: true,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Image.asset("assets/icon.png", height: 30),
-              const SizedBox(width: 10),
-              Text(
-                widget.title,
-                style: GoogleFonts.gentiumBookPlus(
-                  color: const Color.fromARGB(255, 51, 51, 50),
-                  fontSize: 30,
-                ),
-              ),
-            ],
-          ),
+          title: const Header(),
           elevation: 0.0,
           backgroundColor: Colors.transparent,
         ),
@@ -90,101 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           Expanded(
-            child: StreamBuilder(
-              stream: gridBloc.stream,
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                if (!snapshot.hasData) return Container();
-                List<Item> articles = snapshot.data;
-                return GridView.count(
-                  controller: _scrollController,
-                  crossAxisCount: 2,
-                  children: articles
-                      .map(
-                        (article) => GestureDetector(
-                          onTap: () {
-                            if (article.markdown) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => Post(article: article),
-                                ),
-                              );
-                            } else {
-                              FlutterWebBrowser.openWebPage(
-                                url: article.url,
-                                customTabsOptions: const CustomTabsOptions(
-                                  defaultColorSchemeParams:
-                                      CustomTabsColorSchemeParams(
-                                    toolbarColor: Colors.orangeAccent,
-                                  ),
-                                ),
-                                // androidToolbarColor:
-                                //     Colors.orangeAccent
-                              );
-                            }
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(2.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: const HSLColor.fromAHSL(
-                                          0.8, 47, 0.36, 0.95)
-                                      .toColor(),
-                                  border: Border(
-                                    bottom: BorderSide(
-                                      color: const HSLColor.fromAHSL(
-                                              0.3, 0, 0, 0.74)
-                                          .toColor(),
-                                      width: 1.0,
-                                    ),
-                                    right: BorderSide(
-                                      color: const HSLColor.fromAHSL(
-                                              0.3, 0, 0, 0.74)
-                                          .toColor(),
-                                      width: 1.0,
-                                    ),
-                                  ),
-                                ),
-                                child: Row(
-                                  children: <Widget>[
-                                    Container(
-                                        color:
-                                            article.type.color.withOpacity(0.8),
-                                        width: 4),
-                                    Container(
-                                        color:
-                                            article.type.color.withOpacity(0.4),
-                                        width: 4),
-                                    Expanded(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8),
-                                        child: Text(
-                                          article.label,
-                                          maxLines: 4,
-                                          overflow: TextOverflow.ellipsis,
-                                          textAlign: TextAlign.center,
-                                          style: GoogleFonts.openSans(
-                                            fontSize: 25,
-                                            fontWeight: FontWeight.w700,
-                                            color: const Color.fromARGB(
-                                                255, 51, 51, 50),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
-                      .toList(),
-                );
-              },
-            ),
+            child: ArticlesWidget(_scrollController),
           ),
         ],
       ),

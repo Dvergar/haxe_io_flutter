@@ -21,12 +21,16 @@ class _MyChipState extends State<MyChip> {
     return FilterChip(
         label: Text(
           widget.type.typeLabel,
-          style: TextStyle(color: isSelected ? widget.type.color : grey),
+          style: TextStyle(
+            color: isSelected ? widget.type.color : grey,
+          ),
         ),
         showCheckmark: false,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(3),
-          side: BorderSide(color: isSelected ? widget.type.color : grey),
+          side: BorderSide(
+            color: isSelected ? widget.type.color : grey,
+          ),
         ),
         selectedColor: widget.type.color.withOpacity(0.4),
         backgroundColor: Colors.transparent,
