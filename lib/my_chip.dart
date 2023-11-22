@@ -6,15 +6,15 @@ import 'item_type.dart';
 class MyChip extends StatefulWidget {
   final ItemType type;
 
-  MyChip({required this.type});
+  const MyChip({super.key, required this.type});
 
   @override
-  _MyChipState createState() => _MyChipState();
+  State<MyChip> createState() => _MyChipState();
 }
 
 class _MyChipState extends State<MyChip> {
   var isSelected = false;
-  var grey = Color.fromRGBO(189, 189, 189, 0.8);
+  var grey = const Color.fromRGBO(189, 189, 189, 0.8);
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class _MyChipState extends State<MyChip> {
             side: BorderSide(color: isSelected ? widget.type.color : grey)),
         selectedColor: widget.type.color.withOpacity(0.4),
         backgroundColor: Colors.transparent,
-        selected: this.isSelected,
+        selected: isSelected,
         onSelected: (_) {
           print("type ${widget.type}");
           setState(() {

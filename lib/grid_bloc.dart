@@ -48,13 +48,15 @@ class GridBloc {
       Item type;
 
       if (href.startsWith('/ld/')) {
-        var jsonUrl;
-        if (href == '/ld/36/')
+        String? jsonUrl;
+        if (href == '/ld/36/') {
           jsonUrl =
               'https://raw.githubusercontent.com/skial/haxe.io/master/src/data/ld36.json';
-        if (href == '/ld/37/')
+        }
+        if (href == '/ld/37/') {
           jsonUrl =
               'https://raw.githubusercontent.com/skial/haxe.io/master/src/data/ld37.json';
+        }
 
         type = Item(
           type: LudumDare(),
@@ -146,16 +148,14 @@ class GridBloc {
     }
 
     // ALL ITEMS
-    if (filters.length == 0) {
-      gridController.sink.add(this.items);
+    if (filters.isEmpty) {
+      gridController.sink.add(items);
       return;
     }
 
     // DO FILTER
-    var filteredItems = this
-        .items
-        .where((item) => filters.contains(item.type.runtimeType))
-        .toList();
+    var filteredItems =
+        items.where((item) => filters.contains(item.type.runtimeType)).toList();
 
     gridController.sink.add(filteredItems);
   }

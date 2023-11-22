@@ -9,24 +9,26 @@ import 'my_chip.dart';
 import 'post.dart';
 import 'grid_bloc.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'haxe.io',
       theme: ThemeData(
-          iconTheme: IconThemeData(color: Colors.red),
+          iconTheme: const IconThemeData(color: Colors.red),
           primarySwatch: Colors.grey,
-          scaffoldBackgroundColor: Color(0xfffffdf9)),
-      home: MyHomePage(title: 'haxe.io'),
+          scaffoldBackgroundColor: const Color(0xfffffdf9)),
+      home: const MyHomePage(title: 'haxe.io'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({required this.title});
+  const MyHomePage({super.key, required this.title});
 
   final String title;
 
@@ -35,7 +37,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -47,11 +49,11 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Image.asset("assets/icon.png", height: 30),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               Text(
                 widget.title,
                 style: GoogleFonts.gentiumBookPlus(
-                    color: Color.fromARGB(255, 51, 51, 50), fontSize: 30),
+                    color: const Color.fromARGB(255, 51, 51, 50), fontSize: 30),
               ),
             ],
           ),
@@ -105,7 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   } else {
                                     FlutterWebBrowser.openWebPage(
                                       url: article.url,
-                                      customTabsOptions: CustomTabsOptions(
+                                      customTabsOptions: const CustomTabsOptions(
                                           toolbarColor: Colors.orangeAccent),
                                       // androidToolbarColor:
                                       //     Colors.orangeAccent
@@ -118,18 +120,18 @@ class _MyHomePageState extends State<MyHomePage> {
                                     borderRadius: BorderRadius.circular(2.0),
                                     child: Container(
                                       decoration: BoxDecoration(
-                                        color: HSLColor.fromAHSL(
+                                        color: const HSLColor.fromAHSL(
                                                 0.8, 47, 0.36, 0.95)
                                             .toColor(),
                                         border: Border(
                                           bottom: BorderSide(
-                                            color: HSLColor.fromAHSL(
+                                            color: const HSLColor.fromAHSL(
                                                     0.3, 0, 0, 0.74)
                                                 .toColor(),
                                             width: 1.0,
                                           ),
                                           right: BorderSide(
-                                            color: HSLColor.fromAHSL(
+                                            color: const HSLColor.fromAHSL(
                                                     0.3, 0, 0, 0.74)
                                                 .toColor(),
                                             width: 1.0,
@@ -148,7 +150,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                               width: 4),
                                           Expanded(
                                             child: Padding(
-                                              padding: EdgeInsets.all(8),
+                                              padding: const EdgeInsets.all(8),
                                               child: Text(
                                                 article.label,
                                                 maxLines: 4,
@@ -157,7 +159,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                 style: GoogleFonts.openSans(
                                                     fontSize: 25,
                                                     fontWeight: FontWeight.w700,
-                                                    color: Color.fromARGB(
+                                                    color: const Color.fromARGB(
                                                         255, 51, 51, 50)),
                                               ),
                                             ),
@@ -194,5 +196,5 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => new Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
