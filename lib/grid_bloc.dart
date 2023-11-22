@@ -60,7 +60,7 @@ class GridBloc {
 
         type = Item(
           type: LudumDare(),
-          label: title,
+          title: title,
           url: getMarkDownLink(href),
           markdown: true,
           jsonUrl: jsonUrl,
@@ -68,14 +68,14 @@ class GridBloc {
       } else if (href.startsWith('/roundups/')) {
         type = Item(
           type: WeeklyNews(),
-          label: title,
+          title: title,
           url: getMarkDownLink(href),
           markdown: true,
         );
       } else if (href.startsWith('/releases/')) {
         type = Item(
           type: Releases(),
-          label: title,
+          title: title,
           url: getMarkDownLink(href),
           markdown: true,
         );
@@ -85,42 +85,42 @@ class GridBloc {
         mdLink = mdLink.replaceAll("-", " ");
         type = Item(
           type: DeveloperInterviews(),
-          label: title,
+          title: title,
           url: mdLink,
           markdown: true,
         );
       } else if (href.startsWith('/videos/')) {
         type = Item(
           type: Videos(),
-          label: title,
+          title: title,
           url: getMarkDownLink(href),
           markdown: true,
         );
       } else if (href.startsWith('/events/')) {
         type = Item(
           type: Events(),
-          label: title,
+          title: title,
           url: getMarkDownLink(href),
           markdown: true,
         );
       } else if (post.parent?.id == 'link--video') {
         type = Item(
           type: Videos(),
-          label: title,
+          title: title,
           url: href,
           markdown: false,
         );
       } else if (post.parent?.id == 'event--link') {
         type = Item(
           type: Events(),
-          label: title,
+          title: title,
           url: href,
           markdown: false,
         );
       } else {
         type = Item(
           type: Articles(),
-          label: title,
+          title: title,
           url: href,
           markdown: false,
         );

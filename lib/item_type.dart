@@ -2,19 +2,18 @@ import 'dart:ui';
 
 class ItemType {
   final Color color;
-  // TODO rename
-  final String typeLabel;
+  final String label;
 
   ItemType({
     required this.color,
-    required this.typeLabel,
+    required this.label,
   });
 }
 
 class WeeklyNews extends ItemType {
   WeeklyNews()
       : super(
-          typeLabel: "Weekly News",
+          label: "Weekly News",
           color: const Color.fromARGB(255, 241, 89, 34),
         );
 }
@@ -22,7 +21,7 @@ class WeeklyNews extends ItemType {
 class Releases extends ItemType {
   Releases()
       : super(
-          typeLabel: "Releases",
+          label: "Releases",
           color: const Color.fromARGB(255, 108, 198, 68),
         );
 }
@@ -30,7 +29,7 @@ class Releases extends ItemType {
 class Events extends ItemType {
   Events()
       : super(
-          typeLabel: "Events",
+          label: "Events",
           color: const Color.fromARGB(255, 255, 128, 0),
         );
 }
@@ -38,7 +37,7 @@ class Events extends ItemType {
 class Videos extends ItemType {
   Videos()
       : super(
-          typeLabel: "Videos",
+          label: "Videos",
           color: const Color.fromARGB(255, 205, 32, 31),
         );
 }
@@ -46,7 +45,7 @@ class Videos extends ItemType {
 class LudumDare extends ItemType {
   LudumDare()
       : super(
-          typeLabel: "LudumDare",
+          label: "LudumDare",
           color: const Color.fromARGB(255, 119, 68, 204),
         );
 }
@@ -54,7 +53,7 @@ class LudumDare extends ItemType {
 class DeveloperInterviews extends ItemType {
   DeveloperInterviews()
       : super(
-          typeLabel: "Developer Interviews",
+          label: "Developer Interviews",
           color: const Color.fromARGB(255, 255, 128, 0),
         );
 }
@@ -62,7 +61,7 @@ class DeveloperInterviews extends ItemType {
 class Articles extends ItemType {
   Articles()
       : super(
-          typeLabel: "Articles",
+          label: "Articles",
           color: const Color.fromARGB(255, 71, 99, 152),
         );
 }

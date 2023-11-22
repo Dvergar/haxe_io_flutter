@@ -183,7 +183,7 @@ class _PostState extends State<Post> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          widget.article.type.typeLabel,
+          widget.article.type.label,
           style: GoogleFonts.gentiumBookPlus(
               color: const Color.fromARGB(255, 51, 51, 50), fontSize: 30),
         ),

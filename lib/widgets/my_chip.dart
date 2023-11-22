@@ -20,7 +20,7 @@ class _MyChipState extends State<MyChip> {
   Widget build(BuildContext context) {
     return FilterChip(
         label: Text(
-          widget.type.typeLabel,
+          widget.type.label,
           style: TextStyle(
             color: isSelected ? widget.type.color : grey,
           ),

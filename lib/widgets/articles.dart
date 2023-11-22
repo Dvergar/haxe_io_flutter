@@ -77,7 +77,7 @@ class ArticlesWidget extends StatelessWidget {
                               child: Padding(
                                 padding: const EdgeInsets.all(8),
                                 child: Text(
-                                  article.label,
+                                  article.title,
                                   maxLines: 4,
                                   overflow: TextOverflow.ellipsis,
                                   textAlign: TextAlign.center,
