@@ -19,9 +19,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'haxe.io',
       theme: ThemeData(
-          iconTheme: const IconThemeData(color: Colors.red),
-          primarySwatch: Colors.grey,
-          scaffoldBackgroundColor: const Color(0xfffffdf9)),
+        iconTheme: const IconThemeData(color: Colors.red),
+        primarySwatch: Colors.grey,
+        scaffoldBackgroundColor: const Color(0xfffffdf9),
+      ),
       home: const MyHomePage(title: 'haxe.io'),
     );
   }
@@ -33,7 +34,7 @@ class MyHomePage extends StatefulWidget {
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -88,90 +89,97 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           Expanded(
             child: StreamBuilder(
-                stream: gridBloc.stream,
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  if (!snapshot.hasData) return Container();
-                  List<Item> articles = snapshot.data;
-                  return GridView.count(
-                      controller: _scrollController,
-                      crossAxisCount: 2,
-                      children: articles
-                          .map((article) => GestureDetector(
-                                onTap: () {
-                                  if (article.markdown) {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                Post(article: article)));
-                                  } else {
-                                    FlutterWebBrowser.openWebPage(
-                                      url: article.url,
-                                      customTabsOptions: const CustomTabsOptions(
-                                          toolbarColor: Colors.orangeAccent),
-                                      // androidToolbarColor:
-                                      //     Colors.orangeAccent
-                                    );
-                                  }
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(2.0),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: const HSLColor.fromAHSL(
-                                                0.8, 47, 0.36, 0.95)
-                                            .toColor(),
-                                        border: Border(
-                                          bottom: BorderSide(
-                                            color: const HSLColor.fromAHSL(
-                                                    0.3, 0, 0, 0.74)
-                                                .toColor(),
-                                            width: 1.0,
-                                          ),
-                                          right: BorderSide(
-                                            color: const HSLColor.fromAHSL(
-                                                    0.3, 0, 0, 0.74)
-                                                .toColor(),
-                                            width: 1.0,
-                                          ),
-                                        ),
-                                      ),
-                                      child: Row(
-                                        children: <Widget>[
-                                          Container(
-                                              color: article.type.color
-                                                  .withOpacity(0.8),
-                                              width: 4),
-                                          Container(
-                                              color: article.type.color
-                                                  .withOpacity(0.4),
-                                              width: 4),
-                                          Expanded(
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(8),
-                                              child: Text(
-                                                article.label,
-                                                maxLines: 4,
-                                                overflow: TextOverflow.ellipsis,
-                                                textAlign: TextAlign.center,
-                                                style: GoogleFonts.openSans(
-                                                    fontSize: 25,
-                                                    fontWeight: FontWeight.w700,
-                                                    color: const Color.fromARGB(
-                                                        255, 51, 51, 50)),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+              stream: gridBloc.stream,
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (!snapshot.hasData) return Container();
+                List<Item> articles = snapshot.data;
+                return GridView.count(
+                  controller: _scrollController,
+                  crossAxisCount: 2,
+                  children: articles
+                      .map(
+                        (article) => GestureDetector(
+                          onTap: () {
+                            if (article.markdown) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Post(article: article),
+                                ),
+                              );
+                            } else {
+                              FlutterWebBrowser.openWebPage(
+                                url: article.url,
+                                customTabsOptions: const CustomTabsOptions(
+                                  toolbarColor: Colors.orangeAccent,
+                                ),
+                                // androidToolbarColor:
+                                //     Colors.orangeAccent
+                              );
+                            }
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(2.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: const HSLColor.fromAHSL(
+                                          0.8, 47, 0.36, 0.95)
+                                      .toColor(),
+                                  border: Border(
+                                    bottom: BorderSide(
+                                      color: const HSLColor.fromAHSL(
+                                              0.3, 0, 0, 0.74)
+                                          .toColor(),
+                                      width: 1.0,
+                                    ),
+                                    right: BorderSide(
+                                      color: const HSLColor.fromAHSL(
+                                              0.3, 0, 0, 0.74)
+                                          .toColor(),
+                                      width: 1.0,
                                     ),
                                   ),
                                 ),
-                              ))
-                          .toList());
-                }),
+                                child: Row(
+                                  children: <Widget>[
+                                    Container(
+                                        color:
+                                            article.type.color.withOpacity(0.8),
+                                        width: 4),
+                                    Container(
+                                        color:
+                                            article.type.color.withOpacity(0.4),
+                                        width: 4),
+                                    Expanded(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8),
+                                        child: Text(
+                                          article.label,
+                                          maxLines: 4,
+                                          overflow: TextOverflow.ellipsis,
+                                          textAlign: TextAlign.center,
+                                          style: GoogleFonts.openSans(
+                                            fontSize: 25,
+                                            fontWeight: FontWeight.w700,
+                                            color: const Color.fromARGB(
+                                                255, 51, 51, 50),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                );
+              },
+            ),
           ),
         ],
       ),
@@ -192,7 +200,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(onTap: onTap, child: appBar);
+    return GestureDetector(
+      onTap: onTap,
+      child: appBar,
+    );
   }
 
   @override

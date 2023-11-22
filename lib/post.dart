@@ -11,6 +11,254 @@ import 'package:flutter/gestures.dart';
 import 'item.dart';
 import 'dart:convert';
 
+class Post extends StatefulWidget {
+  final Item article;
+
+  const Post({super.key, required this.article});
+
+  @override
+  State<Post> createState() => _PostState();
+}
+
+class _PostState extends State<Post> {
+  Future<String> getDocument(url) async {
+    var client = Client();
+    Response response = await client.get(Uri.parse(url));
+    var parsed = parse(response.body);
+
+    return parsed.body!.text;
+  }
+
+  List<Widget> parseJson(String data) {
+    List<Widget> widgets = [];
+
+    // print("DATA $data");
+
+    Map<dynamic, dynamic> decodedJson = json.decode(data);
+
+    for (var framework in decodedJson['frameworks']) {
+      String frameworkName = framework['framework'];
+      List<dynamic> entries = decodedJson['entries'];
+
+      widgets.add(Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Text(
+          frameworkName,
+          style: const TextStyle(
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+            color: Color(0xff333332),
+          ),
+        ),
+      ));
+
+      var games = entries.where((entry) {
+        var frameworks = entry['frameworks'];
+
+        return frameworks.contains(frameworkName);
+      }).toList();
+
+      for (var game in games) {
+        if (frameworkName == 'Haxe' && game['frameworks'].length > 1) {
+          continue;
+        }
+
+        var gameType =
+            '${game['type'][0].toUpperCase()}${game['type'].substring(1)}';
+        var typeColor = jamColor;
+        if (gameType == 'Compo') typeColor = compoColor;
+
+        widgets.add(
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Flexible(
+                child: RichText(
+                  text: TextSpan(
+                    style: const TextStyle(
+                        fontSize: pFontSize, color: Colors.black),
+                    children: <TextSpan>[
+                      const TextSpan(
+                        text: "    ⬤    ",
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: Color(0xff333332),
+                        ),
+                      ),
+                      TextSpan(
+                        text: game['name'],
+                        style: const TextStyle(
+                          color: aColor,
+                          backgroundColor: aBackgroundColor,
+                        ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () => FlutterWebBrowser.openWebPage(
+                              url:
+                                  "http://ludumdare.com/compo/ludum-dare-37/${game['url']}",
+                              customTabsOptions: const CustomTabsOptions(
+                                toolbarColor: Colors.orangeAccent,
+                              )
+                              // androidToolbarColor: Colors.orangeAccent
+
+                              ),
+                      ),
+                      const TextSpan(text: ' by '),
+                      TextSpan(
+                        text: game['author']['name'],
+                        style: const TextStyle(
+                          color: aColor,
+                          backgroundColor: aBackgroundColor,
+                        ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () => FlutterWebBrowser.openWebPage(
+                                url:
+                                    "http://ludumdare.com/compo${game['author']['url']}",
+                                customTabsOptions: const CustomTabsOptions(
+                                  toolbarColor: Colors.orangeAccent,
+                                )
+                                // androidToolbarColor: Colors.orangeAccent
+                                ,
+                              ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 6),
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: typeColor.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(2.0),
+                  ),
+                  child: Text(
+                    gameType,
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      color: typeColor,
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        );
+      }
+    }
+
+    return widgets;
+  }
+
+  Future<String> getMarkdown(url) async {
+    var markdown = await getDocument(url);
+    // REPLACE WEIRD TOP CHARACTERS
+    markdown = markdown.replaceAll('[“”]: a ""', ''); // What is this ?
+    // MUTATE RELATIVE TO ABSOLUTE LINKS
+    markdown = markdown.replaceAll('/img/',
+        'https://raw.githubusercontent.com/skial/haxe.io/master/src/img/');
+    // TRANSFORM IFRAMES TO LINKS
+    markdown =
+        markdown.replaceAllMapped(RegExp(r'!\[iframe\]\((.*)\)'), (match) {
+      return '${match.group(1)}';
+    });
+    return markdown;
+  }
+
+  Future<List<Widget>> getJson(url) async {
+    return parseJson(await getDocument(url));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          widget.article.type.typeLabel,
+          style: GoogleFonts.gentiumBookPlus(
+              color: const Color.fromARGB(255, 51, 51, 50), fontSize: 30),
+        ),
+        elevation: 0.0,
+        backgroundColor: Colors.transparent,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            FutureBuilder(
+              future: getMarkdown(widget.article.url),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (!snapshot.hasData) {
+                  return const SpinKitChasingDots(
+                    color: Colors.orangeAccent,
+                    size: 100.0,
+                  );
+                }
+
+                return Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: MarkdownBody(
+                    shrinkWrap: true,
+                    data: snapshot.data,
+                    styleSheet: MarkdownStyleSheet(
+                      p: const TextStyle(
+                        fontSize: pFontSize,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w300,
+                      ),
+                      a: const TextStyle(
+                        color: aColor,
+                        backgroundColor: aBackgroundColor,
+                      ),
+                    ),
+                    onTapLink: (text, link, title) {
+                      // print("link $link");
+                      FlutterWebBrowser.openWebPage(
+                        url: link!,
+                        // androidToolbarColor: Colors.orangeAccent
+                        customTabsOptions: const CustomTabsOptions(
+                          toolbarColor: Colors.orangeAccent,
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
+            widget.article.jsonUrl != null
+                ? Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 18),
+                    alignment: Alignment.centerLeft,
+                    child: FutureBuilder<List<Widget>>(
+                      future: getJson(widget.article.jsonUrl),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return const SpinKitChasingDots(
+                            color: Colors.orangeAccent,
+                            size: 100.0,
+                          );
+                        }
+
+                        return Column(
+                          mainAxisSize: MainAxisSize.max,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            ...snapshot.data!,
+                          ],
+                        );
+                      },
+                    ),
+                  )
+                : Container()
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 var ldJson = '''
 {
   "ld": 37,
@@ -705,227 +953,3 @@ var ldJson = '''
   ]
 }
 ''';
-
-class Post extends StatefulWidget {
-  final Item article;
-
-  const Post({super.key, required this.article});
-
-  @override
-  State<Post> createState() => _PostState();
-}
-
-class _PostState extends State<Post> {
-  Future<String> getDocument(url) async {
-    var client = Client();
-    Response response = await client.get(Uri.parse(url));
-    var parsed = parse(response.body);
-
-    return parsed.body!.text;
-  }
-
-  List<Widget> parseJson(String data) {
-    List<Widget> widgets = [];
-
-    print("DATA $data");
-
-    Map<dynamic, dynamic> decodedJson = json.decode(data);
-
-    for (var framework in decodedJson['frameworks']) {
-      String frameworkName = framework['framework'];
-      List<dynamic> entries = decodedJson['entries'];
-
-      widgets.add(Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
-        child: Text(frameworkName,
-            style: const TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: Color(0xff333332))),
-      ));
-
-      var games = entries.where((entry) {
-        var frameworks = entry['frameworks'];
-
-        return frameworks.contains(frameworkName);
-      }).toList();
-
-      for (var game in games) {
-        if (frameworkName == 'Haxe' && game['frameworks'].length > 1) {
-          continue;
-        }
-
-        var gameType =
-            '${game['type'][0].toUpperCase()}${game['type'].substring(1)}';
-        var typeColor = jamColor;
-        if (gameType == 'Compo') typeColor = compoColor;
-
-        widgets.add(
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Flexible(
-                child: RichText(
-                  text: TextSpan(
-                    style: const TextStyle(
-                        fontSize: pFontSize, color: Colors.black),
-                    children: <TextSpan>[
-                      const TextSpan(
-                          text: "    ⬤    ",
-                          style: TextStyle(
-                              fontSize: 10, color: Color(0xff333332))),
-                      TextSpan(
-                          text: game['name'],
-                          style: const TextStyle(
-                              color: aColor, backgroundColor: aBackgroundColor),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () => FlutterWebBrowser.openWebPage(
-                                url:
-                                    "http://ludumdare.com/compo/ludum-dare-37/${game['url']}",
-                                customTabsOptions: const CustomTabsOptions(
-                                    toolbarColor: Colors.orangeAccent)
-                                // androidToolbarColor: Colors.orangeAccent
-                                )),
-                      const TextSpan(text: ' by '),
-                      TextSpan(
-                          text: game['author']['name'],
-                          style: const TextStyle(
-                              color: aColor, backgroundColor: aBackgroundColor),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () => FlutterWebBrowser.openWebPage(
-                                url:
-                                    "http://ludumdare.com/compo${game['author']['url']}",
-                                customTabsOptions: const CustomTabsOptions(
-                                    toolbarColor: Colors.orangeAccent)
-                                // androidToolbarColor: Colors.orangeAccent
-                                )),
-                    ],
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 6),
-                child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-                    decoration: BoxDecoration(
-                        color: typeColor.withOpacity(0.3),
-                        borderRadius: BorderRadius.circular(2.0)),
-                    child: Text(
-                      gameType,
-                      style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                          color: typeColor),
-                    )),
-              )
-            ],
-          ),
-        );
-      }
-    }
-
-    return widgets;
-  }
-
-  Future<String> getMarkdown(url) async {
-    var markdown = await getDocument(url);
-    // REPLACE WEIRD TOP CHARACTERS
-    markdown = markdown.replaceAll('[“”]: a ""', ''); // What is this ?
-    // MUTATE RELATIVE TO ABSOLUTE LINKS
-    markdown = markdown.replaceAll('/img/',
-        'https://raw.githubusercontent.com/skial/haxe.io/master/src/img/');
-    // TRANSFORM IFRAMES TO LINKS
-    markdown =
-        markdown.replaceAllMapped(RegExp(r'!\[iframe\]\((.*)\)'), (match) {
-      return '${match.group(1)}';
-    });
-    return markdown;
-  }
-
-  Future<List<Widget>> getJson(url) async {
-    return parseJson(await getDocument(url));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text(
-            widget.article.type.typeLabel,
-            style: GoogleFonts.gentiumBookPlus(
-                color: const Color.fromARGB(255, 51, 51, 50), fontSize: 30),
-          ),
-          elevation: 0.0,
-          backgroundColor: Colors.transparent,
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              FutureBuilder(
-                future: getMarkdown(widget.article.url),
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  if (!snapshot.hasData) {
-                    return const SpinKitChasingDots(
-                      color: Colors.orangeAccent,
-                      size: 100.0,
-                    );
-                  }
-
-                  return Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: MarkdownBody(
-                      shrinkWrap: true,
-                      data: snapshot.data,
-                      styleSheet: MarkdownStyleSheet(
-                          p: const TextStyle(
-                              fontSize: pFontSize,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w300),
-                          a: const TextStyle(
-                              color: aColor,
-                              backgroundColor: aBackgroundColor)),
-                      onTapLink: (text, link, title) {
-                        print("link $link");
-                        FlutterWebBrowser.openWebPage(
-                          url: link!,
-                          // androidToolbarColor: Colors.orangeAccent
-                          customTabsOptions: const CustomTabsOptions(
-                            toolbarColor: Colors.orangeAccent,
-                          ),
-                        );
-                      },
-                    ),
-                  );
-                },
-              ),
-              widget.article.jsonUrl != null
-                  ? Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 18),
-                      alignment: Alignment.centerLeft,
-                      child: FutureBuilder<List<Widget>>(
-                          future: getJson(widget.article.jsonUrl),
-                          builder: (context, snapshot) {
-                            if (!snapshot.hasData) {
-                              return const SpinKitChasingDots(
-                                color: Colors.orangeAccent,
-                                size: 100.0,
-                              );
-                            }
-
-                            return Column(
-                              mainAxisSize: MainAxisSize.max,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                ...snapshot.data!,
-                              ],
-                            );
-                          }),
-                    )
-                  : Container()
-            ],
-          ),
-        ));
-  }
-}

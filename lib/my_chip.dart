@@ -25,13 +25,13 @@ class _MyChipState extends State<MyChip> {
         ),
         showCheckmark: false,
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(3),
-            side: BorderSide(color: isSelected ? widget.type.color : grey)),
+          borderRadius: BorderRadius.circular(3),
+          side: BorderSide(color: isSelected ? widget.type.color : grey),
+        ),
         selectedColor: widget.type.color.withOpacity(0.4),
         backgroundColor: Colors.transparent,
         selected: isSelected,
         onSelected: (_) {
-          print("type ${widget.type}");
           setState(() {
             isSelected = !isSelected;
             gridBloc.sortBy(widget.type);
