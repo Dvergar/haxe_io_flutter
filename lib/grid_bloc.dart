@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:haxe_io_flutter/item.dart';
 import 'package:html/dom.dart' as doom;
+import 'package:html/dom.dart';
 import 'package:html/parser.dart';
 import 'package:http/http.dart';
 
@@ -15,13 +16,15 @@ class GridBloc {
   Stream get stream => gridController.stream;
 
   GridBloc() {
-    scrape().then((items) {
-      this.items = items;
-      gridController.sink.add(items);
-    });
+    scrape().then(
+      (items) {
+        this.items = items;
+        gridController.sink.add(items);
+      },
+    );
   }
 
-  Future getDocument(url) async {
+  Future<Document> getDocument(url) async {
     var client = Client();
     Response response = await client.get(Uri.parse(url));
     return parse(utf8.decode(response.bodyBytes));
@@ -34,11 +37,6 @@ class GridBloc {
     getMarkDownLink(String href) {
       var hrefClean = href.substring(0, href.length - 1);
       return 'https://raw.githubusercontent.com/skial/haxe.io/master/src/$hrefClean.md';
-    }
-
-    getJsonLink(String href) {
-      var hrefClean = href.substring(0, href.length - 1);
-      return 'https://raw.githubusercontent.com/skial/haxe.io/master/src/data$hrefClean.json';
     }
 
     return posts.map((post) {
