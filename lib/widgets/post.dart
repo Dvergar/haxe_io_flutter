@@ -8,7 +8,7 @@ import 'package:html/parser.dart';
 import 'package:http/http.dart';
 import 'package:flutter/gestures.dart';
 
-import 'item.dart';
+import '../item.dart';
 import 'dart:convert';
 
 class Post extends StatefulWidget {

@@ -5,8 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_web_browser/flutter_web_browser.dart';
 
 import 'item_type.dart';
-import 'my_chip.dart';
-import 'post.dart';
+import 'widgets/my_chip.dart';
+import 'widgets/post.dart';
 import 'grid_bloc.dart';
 
 void main() => runApp(const MyApp());
@@ -54,7 +54,9 @@ class _MyHomePageState extends State<MyHomePage> {
               Text(
                 widget.title,
                 style: GoogleFonts.gentiumBookPlus(
-                    color: const Color.fromARGB(255, 51, 51, 50), fontSize: 30),
+                  color: const Color.fromARGB(255, 51, 51, 50),
+                  fontSize: 30,
+                ),
               ),
             ],
           ),

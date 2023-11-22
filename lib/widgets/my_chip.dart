@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'grid_bloc.dart';
-import 'item_type.dart';
+import '../grid_bloc.dart';
+import '../item_type.dart';
 
 class MyChip extends StatefulWidget {
   final ItemType type;
