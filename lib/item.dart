@@ -4,14 +4,14 @@ class Item {
   final ItemType type;
   final String label;
   final String url;
-  final String? jsonUrl;
   final bool markdown;
+  final String? jsonUrl;
 
   Item({
     required this.type,
     required this.label,
     required this.url,
-    required this.jsonUrl,
     required this.markdown,
+    this.jsonUrl,
   });
 }

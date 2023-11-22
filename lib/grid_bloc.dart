@@ -71,7 +71,6 @@ class GridBloc {
           label: title,
           url: getMarkDownLink(href),
           markdown: true,
-          jsonUrl: null,
         );
       } else if (href.startsWith('/releases/')) {
         type = Item(
@@ -79,8 +78,6 @@ class GridBloc {
           label: title,
           url: getMarkDownLink(href),
           markdown: true,
-          // TODO null by default?
-          jsonUrl: null,
         );
       } else if (href.startsWith('/wwx/')) // Fragile
       {
@@ -91,7 +88,6 @@ class GridBloc {
           label: title,
           url: mdLink,
           markdown: true,
-          jsonUrl: null,
         );
       } else if (href.startsWith('/videos/')) {
         type = Item(
@@ -99,7 +95,6 @@ class GridBloc {
           label: title,
           url: getMarkDownLink(href),
           markdown: true,
-          jsonUrl: null,
         );
       } else if (href.startsWith('/events/')) {
         type = Item(
@@ -107,7 +102,6 @@ class GridBloc {
           label: title,
           url: getMarkDownLink(href),
           markdown: true,
-          jsonUrl: null,
         );
       } else if (post.parent?.id == 'link--video') {
         type = Item(
@@ -115,7 +109,6 @@ class GridBloc {
           label: title,
           url: href,
           markdown: false,
-          jsonUrl: null,
         );
       } else if (post.parent?.id == 'event--link') {
         type = Item(
@@ -123,7 +116,6 @@ class GridBloc {
           label: title,
           url: href,
           markdown: false,
-          jsonUrl: null,
         );
       } else {
         type = Item(
@@ -131,7 +123,6 @@ class GridBloc {
           label: title,
           url: href,
           markdown: false,
-          jsonUrl: null,
         );
       }
 
