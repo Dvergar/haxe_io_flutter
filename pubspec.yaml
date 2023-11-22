@@ -24,7 +24,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.6
   flutter_markdown: ^0.6.18+2
-  http: ^1.1.0
+  http: ^1.1.1
   html: ^0.15.4
   google_fonts: ^6.1.0
   flutter_web_browser: ^0.17.1
@@ -34,6 +34,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_launcher_icons: ^0.13.1
+  flutter_lints: ^3.0.1
 
 flutter_icons:
   android: "launcher_icon"
